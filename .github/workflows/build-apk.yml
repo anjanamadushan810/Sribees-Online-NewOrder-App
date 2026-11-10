@@ -1,0 +1,110 @@
+name: Build Sribees New Orders APK
+
+# Manual only (owner rule since 2026-09-28: nothing builds on push).
+on:
+  workflow_dispatch:
+    inputs:
+      flavor:
+        description: 'Which backend the APK talks to'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.flavor }}
+  cancel-in-progress: true
+
+jobs:
+  build-apk:
+    name: Build signed ${{ inputs.flavor }} APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Static analysis
+        run: flutter analyze
+
+      - name: Tests
+        run: flutter test
+
+      - name: Read version from pubspec.yaml
+        run: |
+          RAW=$(grep -m1 '^version:' pubspec.yaml | awk '{print $2}')
+          echo "VERSION=${RAW%%+*}" >> "$GITHUB_ENV"
+          echo "FULL_VERSION=$RAW" >> "$GITHUB_ENV"
+          echo "Building $RAW (${{ inputs.flavor }})"
+
+      # Every APK must carry the same key, or a phone refuses to update the
+      # installed app. The runner's debug key is new on every run.
+      - name: Install the signing key
+        env:
+          KEYSTORE: ${{ secrets.NEWORDERS_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.NEWORDERS_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.NEWORDERS_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.NEWORDERS_KEY_PASSWORD }}
+        run: |
+          missing=""
+          [ -n "$KEYSTORE" ]       || missing="$missing NEWORDERS_KEYSTORE_BASE64"
+          [ -n "$STORE_PASSWORD" ] || missing="$missing NEWORDERS_KEYSTORE_PASSWORD"
+          [ -n "$KEY_ALIAS" ]      || missing="$missing NEWORDERS_KEY_ALIAS"
+          [ -n "$KEY_PASSWORD" ]   || missing="$missing NEWORDERS_KEY_PASSWORD"
+          if [ -n "$missing" ]; then
+            echo "::error::missing signing secrets:$missing"
+            exit 1
+          fi
+          umask 077
+          printf '%s' "$KEYSTORE" | base64 -d > android/release-keystore.jks
+          if ! keytool -list -keystore android/release-keystore.jks \
+                 -storepass "$STORE_PASSWORD" >/dev/null 2>&1; then
+            echo "::error::the decoded keystore could not be opened -- check NEWORDERS_KEYSTORE_BASE64 and NEWORDERS_KEYSTORE_PASSWORD"
+            exit 1
+          fi
+          {
+            printf 'storeFile=release-keystore.jks\n'
+            printf 'storePassword=%s\n' "$STORE_PASSWORD"
+            printf 'keyAlias=%s\n' "$KEY_ALIAS"
+            printf 'keyPassword=%s\n' "$KEY_PASSWORD"
+          } > android/key.properties
+
+      - name: Build release APK
+        run: flutter build apk --release --flavor ${{ inputs.flavor }}
+
+      - name: Name the APK
+        run: |
+          src=build/app/outputs/flutter-apk/app-${{ inputs.flavor }}-release.apk
+          dst=build/app/outputs/flutter-apk/sribees-new-orders-${{ inputs.flavor }}-v${{ env.FULL_VERSION }}.apk
+          mv "$src" "$dst"
+          echo "APK_PATH=$dst" >> "$GITHUB_ENV"
+
+      # Owner rule: APK version == pubspec.yaml == Settings screen.
+      - name: Verify the APK carries the pubspec version
+        run: bash scripts/verify_build_version.sh "$APK_PATH"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: sribees-new-orders-${{ inputs.flavor }}-v${{ env.FULL_VERSION }}
+          path: ${{ env.APK_PATH }}
+          if-no-files-found: error
+          retention-days: 3

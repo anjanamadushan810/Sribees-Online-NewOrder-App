@@ -1,0 +1,14 @@
+{
+  "@@locale": "en",
+  "appTitle": "Sribees New Orders",
+  "appTagline": "Your branch's orders, the moment they arrive",
+  "setupReady": "Setup is ready. Sign-in comes next.",
+  "versionLabel": "Version {version}",
+  "@versionLabel": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  },
+  "languageName": "English",
+  "switchLanguage": "Language"
+}
