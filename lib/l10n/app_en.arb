@@ -2,7 +2,6 @@
   "@@locale": "en",
   "appTitle": "Sribees New Orders",
   "appTagline": "Your branch's orders, the moment they arrive",
-  "setupReady": "Setup is ready. Sign-in comes next.",
   "versionLabel": "Version {version}",
   "@versionLabel": {
     "placeholders": {
@@ -10,5 +9,50 @@
     }
   },
   "languageName": "English",
-  "switchLanguage": "Language"
+  "switchLanguage": "Language",
+
+  "signInSubtitle": "Use the email and password you use on the Sribees admin web.",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
+  "signInButton": "Sign in",
+  "emailRequired": "Enter your email",
+  "emailInvalid": "That doesn't look like an email address",
+  "passwordRequired": "Enter your password",
+
+  "errInvalidCredentials": "Email or password is wrong, or this account is disabled.",
+  "errNoOrderAccess": "This account can't see orders. Ask a super admin for the Orders permission.",
+  "errNoBranch": "This account has no branch assigned. Ask a super admin to assign one.",
+  "errSessionExpired": "You were signed out. Please sign in again.",
+  "errOffline": "No internet connection. Check Wi-Fi or mobile data.",
+  "errTimeout": "The server is taking too long. Try again.",
+  "errServer": "Something went wrong on the server. Try again shortly.",
+  "errUnknown": "Something went wrong. Try again.",
+
+  "hello": "Hello, {name}",
+  "@hello": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "ordersComingSoon": "The orders list arrives in the next update.",
+
+  "settingsTitle": "Settings",
+  "roleLabel": "Role",
+  "branchLabel": "Branch",
+  "allBranches": "All branches",
+  "assignedBranch": "Assigned branch",
+  "roleSuperAdmin": "Super Admin",
+  "roleBranchManager": "Branch Manager",
+  "roleMarketingManager": "Marketing Manager",
+  "roleInventoryManager": "Inventory Manager",
+  "roleCustomerSupport": "Customer Support",
+  "roleStaff": "Staff",
+  "roleUnknown": "Admin",
+  "aboutApp": "About",
+  "signOut": "Sign out",
+  "signOutConfirmTitle": "Sign out?",
+  "signOutConfirmBody": "This phone won't get new-order alerts until you sign in again.",
+  "cancel": "Cancel"
 }

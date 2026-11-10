@@ -68,12 +68,9 @@ class ApiClient {
             }
           }
 
-          // Attach Selected Branch context if available
-          final branchId = await storage.getSelectedBranchId();
-          if (branchId != null && branchId.isNotEmpty) {
-            options.headers['X-Branch-Id'] = branchId;
-          }
-
+          // No branch header: the server derives branch scope from the
+          // login alone (BranchScope). A super admin's branch filter is a
+          // query parameter on the call that needs it.
           return handler.next(options);
         },
         onError: (DioException error, handler) async {
