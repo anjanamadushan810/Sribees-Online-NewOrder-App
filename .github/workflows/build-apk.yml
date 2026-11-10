@@ -13,6 +13,10 @@ on:
           - dev
           - prod
 
+# The build only reads the code; artifacts upload with the run's own token.
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.flavor }}
   cancel-in-progress: true
