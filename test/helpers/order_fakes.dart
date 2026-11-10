@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:sribees_new_orders/features/orders/models/order_detail.dart';
 import 'package:sribees_new_orders/features/orders/models/order_summary.dart';
 import 'package:sribees_new_orders/features/orders/models/orders_query.dart';
 import 'package:sribees_new_orders/features/orders/repositories/orders_repository.dart';
@@ -33,6 +34,84 @@ Map<String, dynamic> orderJson(
       'courier_tracking_status': null,
     };
 
+/// Shape of `GET /admin/orders/{id}` data on the development backend.
+Map<String, dynamic> orderDetailJson(
+  String id, {
+  String status = 'pending',
+  String method = 'COD',
+  String payment = 'pending',
+  bool pickupRegistered = true,
+  String? phone = '0771234567',
+}) =>
+    {
+      'order_id': id,
+      'order_number': 'SB-$id',
+      'status': status,
+      'payment_status': payment,
+      'payment_method': method,
+      'branch_id': 'B-1',
+      'branch_name': 'Matugama',
+      'created_at': '2026-11-10T08:00:00+00:00',
+      'delivery_slot_date': null,
+      'delivery_slot_time': null,
+      'notes': 'Ring the bell twice',
+      'customer': {
+        'user_id': 'U-$id',
+        'full_name': 'Kamala Silva',
+        'email': 'kamala@example.com',
+        'phone': phone,
+      },
+      'delivery_address': {
+        'address_line1': '12 Temple Road',
+        'address_line2': null,
+        'postal_city': 'Matugama',
+        'district': 'Kalutara',
+        'province': 'Western',
+        'postal_code': '12100',
+      },
+      'items': [
+        {
+          'order_item_id': 'I-1',
+          'product_id': 'P-1',
+          'product_name': 'Anchor Milk Powder',
+          'variant_name': '400g',
+          'product_sku': 'SKU1',
+          'product_image': '/uploads/products/p1.png',
+          'quantity': 2,
+          'unit_price': 500.0,
+          'subtotal': 1000.0,
+          'is_returnable': true,
+        },
+      ],
+      'pricing': {
+        'subtotal': 1000.0,
+        'tax_amount': 0.0,
+        'shipping_amount': 250.0,
+        'discount_amount': 0.0,
+        'wallet_deduction': 0.0,
+        'cashback_earned': 0.0,
+        'total_amount': 1250.0,
+      },
+      'history': [
+        {
+          'history_id': 'h1',
+          'old_status': null,
+          'new_status': 'pending',
+          'changed_by': 'Customer',
+          'notes': 'Order placed by customer',
+          'created_at': '2026-11-10T08:00:00+00:00',
+        },
+      ],
+      'courier': {
+        'payment_method': method == 'COD' ? 'cod' : 'prepaid',
+        'cod_amount': method == 'COD' ? 1250.0 : 0.0,
+        'booking_status': null,
+        'waybill': null,
+        'can_request_pickup': false,
+        'branch_pickup_registered': pickupRegistered,
+      },
+    };
+
 OrderSummary order(String id, {String status = 'pending', DateTime? created}) =>
     OrderSummary.fromJson(orderJson(id, status: status, created: created));
 
@@ -54,6 +133,38 @@ class FakeOrdersRepository implements OrdersRepository {
         totalPages: totalPages,
         statusCounts: counts ?? const {'pending': 2, 'confirmed': 1, 'delivered': 5},
       );
+
+  // ---- detail / actions (P3) ----
+  Map<String, dynamic> detailJson = orderDetailJson('1');
+  List<Map<String, String>> actions = const [
+    {'status': 'confirmed', 'label': 'Confirm Order', 'kind': 'primary'},
+    {'status': 'cancelled', 'label': 'Cancel Order', 'kind': 'danger'},
+  ];
+  Object? detailError;
+  Object? updateError;
+  final updates = <String>[];
+
+  /// After a successful update, what the server returns next.
+  void Function(String status)? onUpdate;
+
+  @override
+  Future<OrderDetail> detail(String orderId) async {
+    final e = detailError;
+    if (e != null) throw e;
+    return OrderDetail.fromJson(detailJson);
+  }
+
+  @override
+  Future<List<StatusAction>> nextActions(String orderId) async =>
+      [for (final a in actions) StatusAction.fromJson(a)];
+
+  @override
+  Future<void> updateStatus(String orderId, String targetStatus) async {
+    updates.add(targetStatus);
+    final e = updateError;
+    if (e != null) throw e;
+    onUpdate?.call(targetStatus);
+  }
 
   @override
   Future<OrdersPage> list(OrdersQuery query, {required int page, int limit = 20}) async {

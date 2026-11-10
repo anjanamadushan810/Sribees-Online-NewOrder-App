@@ -92,8 +92,171 @@ class AppLocalizationsSi extends AppLocalizations {
   String get ordersTitle => 'Orders';
 
   @override
-  String get orderDetailsComingSoon =>
-      'Order එකේ සම්පූර්ණ විස්තර ඊළඟ update එකෙන් එනවා.';
+  String get actConfirmOrder => 'Order එක තහවුරු කරන්න';
+
+  @override
+  String get actCancelOrder => 'Order එක අවලංගු කරන්න';
+
+  @override
+  String get actStartPacking => 'පැක් කරන්න පටන් ගන්න';
+
+  @override
+  String get actMarkPacked => 'පැක් කළා';
+
+  @override
+  String get actReadyForPickup => 'Courier ට ගන්න සූදානම්';
+
+  @override
+  String get actMarkShipped => 'යැව්වා';
+
+  @override
+  String get actOutForDelivery => 'බෙදාහරින්න පිටත් කළා';
+
+  @override
+  String get actMarkDelivered => 'භාරදුන්නා';
+
+  @override
+  String get actDeliveryFailed => 'භාරදීම අසාර්ථකයි';
+
+  @override
+  String get actReschedule => 'ආයෙ බෙදාහරින්න';
+
+  @override
+  String get actRto => 'Hub එකට ආපහු (RTO)';
+
+  @override
+  String confirmMove(String number, String status) {
+    return 'Order $number \"$status\" වෙනවා.';
+  }
+
+  @override
+  String get notifyNote => 'Customer ට ඉබේම පණිවිඩයක් යනවා.';
+
+  @override
+  String get courierBookNote =>
+      'මේකෙන් parcel එක ගන්න SribeesExpress rider කෙනෙක් book වෙනවා.';
+
+  @override
+  String get cancelNote =>
+      'Order එක අවලංගු වෙලා stock එක ආපහු එකතු වෙනවා. App එකෙන් මේක ආපහු හරවන්න බෑ.';
+
+  @override
+  String get pickupNotRegistered =>
+      'මේ ශාඛාව SribeesExpress pickup සඳහා register කරලා නෑ. Rider වෙන ලිපිනයකට යන්න පුළුවන්.';
+
+  @override
+  String get yes => 'ඔව්';
+
+  @override
+  String statusChanged(String status) {
+    return 'Status එක වෙනස් කළා: $status';
+  }
+
+  @override
+  String get statusChangeFailed => 'Status එක වෙනස් කරන්න බැරි වුණා.';
+
+  @override
+  String get readOnlyInfo => 'ඔබේ තනතුරට මේ order එක බලන්න විතරයි පුළුවන්.';
+
+  @override
+  String get noFurtherSteps => 'මේ order එකට app එකෙන් කරන්න තව පියවර නෑ.';
+
+  @override
+  String get secCustomer => 'පාරිභෝගිකයා';
+
+  @override
+  String get secAddress => 'බෙදාහරින ලිපිනය';
+
+  @override
+  String get secItems => 'භාණ්ඩ';
+
+  @override
+  String get secPayment => 'ගෙවීම';
+
+  @override
+  String get secHistory => 'ඉතිහාසය';
+
+  @override
+  String get secNote => 'Customer ගේ සටහන';
+
+  @override
+  String get secSlot => 'බෙදාහරින වේලාව';
+
+  @override
+  String get call => 'Call කරන්න';
+
+  @override
+  String get whatsapp => 'WhatsApp';
+
+  @override
+  String get openMaps => 'Map එකේ බලන්න';
+
+  @override
+  String get cannotOpen => 'මේ phone එකේ ඒක open කරන්න app එකක් නෑ.';
+
+  @override
+  String placedAt(String time) {
+    return 'Order කළේ $time';
+  }
+
+  @override
+  String qtyTimes(int qty, String price) {
+    return '$qty × $price';
+  }
+
+  @override
+  String get payCod => 'භාරදෙද්දී මුදල් (COD)';
+
+  @override
+  String get payCard => 'Card';
+
+  @override
+  String get payWallet => 'Wallet';
+
+  @override
+  String get payBank => 'බැංකු මාරුව';
+
+  @override
+  String get codToCollect => 'එකතු කරගන්න ඕනේ මුදල';
+
+  @override
+  String get priceSubtotal => 'භාණ්ඩ';
+
+  @override
+  String get priceDelivery => 'Delivery ගාස්තුව';
+
+  @override
+  String get priceDiscount => 'වට්ටම';
+
+  @override
+  String get priceWallet => 'Wallet එකෙන් ගෙව්වා';
+
+  @override
+  String get priceTotal => 'මුළු මුදල';
+
+  @override
+  String get orderLoadFailed => 'මේ order එක load කරන්න බැරි වුණා.';
+
+  @override
+  String get orderOtherBranch => 'මේ order එක වෙන ශාඛාවක එකක්.';
+
+  @override
+  String get stepConfirmed => 'තහවුරුයි';
+
+  @override
+  String get stepPacking => 'පැක් කරමින්';
+
+  @override
+  String get stepPacked => 'පැක් කළා';
+
+  @override
+  String get stepCourier => 'Courier';
+
+  @override
+  String get stepOnTheWay => 'එන ගමන්';
+
+  @override
+  String get stepDelivered => 'භාරදුන්නා';
 
   @override
   String get tabAll => 'සියල්ල';

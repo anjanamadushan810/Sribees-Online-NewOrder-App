@@ -242,11 +242,317 @@ abstract class AppLocalizations {
   /// **'Orders'**
   String get ordersTitle;
 
-  /// No description provided for @orderDetailsComingSoon.
+  /// No description provided for @actConfirmOrder.
   ///
   /// In en, this message translates to:
-  /// **'Full order details arrive in the next update.'**
-  String get orderDetailsComingSoon;
+  /// **'Confirm order'**
+  String get actConfirmOrder;
+
+  /// No description provided for @actCancelOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel order'**
+  String get actCancelOrder;
+
+  /// No description provided for @actStartPacking.
+  ///
+  /// In en, this message translates to:
+  /// **'Start packing'**
+  String get actStartPacking;
+
+  /// No description provided for @actMarkPacked.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as packed'**
+  String get actMarkPacked;
+
+  /// No description provided for @actReadyForPickup.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready for courier pickup'**
+  String get actReadyForPickup;
+
+  /// No description provided for @actMarkShipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as shipped'**
+  String get actMarkShipped;
+
+  /// No description provided for @actOutForDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Out for delivery'**
+  String get actOutForDelivery;
+
+  /// No description provided for @actMarkDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as delivered'**
+  String get actMarkDelivered;
+
+  /// No description provided for @actDeliveryFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery failed'**
+  String get actDeliveryFailed;
+
+  /// No description provided for @actReschedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Reschedule delivery'**
+  String get actReschedule;
+
+  /// No description provided for @actRto.
+  ///
+  /// In en, this message translates to:
+  /// **'Return to hub (RTO)'**
+  String get actRto;
+
+  /// No description provided for @confirmMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Order {number} will become \"{status}\".'**
+  String confirmMove(String number, String status);
+
+  /// No description provided for @notifyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'The customer gets an automatic message.'**
+  String get notifyNote;
+
+  /// No description provided for @courierBookNote.
+  ///
+  /// In en, this message translates to:
+  /// **'This books a SribeesExpress rider to collect the parcel.'**
+  String get courierBookNote;
+
+  /// No description provided for @cancelNote.
+  ///
+  /// In en, this message translates to:
+  /// **'The order is cancelled and its stock goes back. The app can\'t undo this.'**
+  String get cancelNote;
+
+  /// No description provided for @pickupNotRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'This branch isn\'t registered for SribeesExpress pickup, so the rider may go to another address.'**
+  String get pickupNotRegistered;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @statusChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Status updated: {status}'**
+  String statusChanged(String status);
+
+  /// No description provided for @statusChangeFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t change the status.'**
+  String get statusChangeFailed;
+
+  /// No description provided for @readOnlyInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Your role can view this order but not change it.'**
+  String get readOnlyInfo;
+
+  /// No description provided for @noFurtherSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'No further steps from the app for this order.'**
+  String get noFurtherSteps;
+
+  /// No description provided for @secCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer'**
+  String get secCustomer;
+
+  /// No description provided for @secAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery address'**
+  String get secAddress;
+
+  /// No description provided for @secItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Items'**
+  String get secItems;
+
+  /// No description provided for @secPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get secPayment;
+
+  /// No description provided for @secHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get secHistory;
+
+  /// No description provided for @secNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer note'**
+  String get secNote;
+
+  /// No description provided for @secSlot.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery slot'**
+  String get secSlot;
+
+  /// No description provided for @call.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get call;
+
+  /// No description provided for @whatsapp.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp'**
+  String get whatsapp;
+
+  /// No description provided for @openMaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in Maps'**
+  String get openMaps;
+
+  /// No description provided for @cannotOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'No app on this phone can open that.'**
+  String get cannotOpen;
+
+  /// No description provided for @placedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Placed {time}'**
+  String placedAt(String time);
+
+  /// No description provided for @qtyTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'{qty} × {price}'**
+  String qtyTimes(int qty, String price);
+
+  /// No description provided for @payCod.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash on delivery'**
+  String get payCod;
+
+  /// No description provided for @payCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Card'**
+  String get payCard;
+
+  /// No description provided for @payWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet'**
+  String get payWallet;
+
+  /// No description provided for @payBank.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank transfer'**
+  String get payBank;
+
+  /// No description provided for @codToCollect.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash to collect'**
+  String get codToCollect;
+
+  /// No description provided for @priceSubtotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Items'**
+  String get priceSubtotal;
+
+  /// No description provided for @priceDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery'**
+  String get priceDelivery;
+
+  /// No description provided for @priceDiscount.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount'**
+  String get priceDiscount;
+
+  /// No description provided for @priceWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid from wallet'**
+  String get priceWallet;
+
+  /// No description provided for @priceTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get priceTotal;
+
+  /// No description provided for @orderLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load this order.'**
+  String get orderLoadFailed;
+
+  /// No description provided for @orderOtherBranch.
+  ///
+  /// In en, this message translates to:
+  /// **'This order belongs to another branch.'**
+  String get orderOtherBranch;
+
+  /// No description provided for @stepConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get stepConfirmed;
+
+  /// No description provided for @stepPacking.
+  ///
+  /// In en, this message translates to:
+  /// **'Packing'**
+  String get stepPacking;
+
+  /// No description provided for @stepPacked.
+  ///
+  /// In en, this message translates to:
+  /// **'Packed'**
+  String get stepPacked;
+
+  /// No description provided for @stepCourier.
+  ///
+  /// In en, this message translates to:
+  /// **'Courier'**
+  String get stepCourier;
+
+  /// No description provided for @stepOnTheWay.
+  ///
+  /// In en, this message translates to:
+  /// **'On the way'**
+  String get stepOnTheWay;
+
+  /// No description provided for @stepDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get stepDelivered;
 
   /// No description provided for @tabAll.
   ///

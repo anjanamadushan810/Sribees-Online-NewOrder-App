@@ -94,7 +94,7 @@ class _OrdersPageState extends ConsumerState<OrdersPage> with WidgetsBindingObse
   Future<void> _open(OrderSummary order) async {
     ref.read(seenOrdersProvider.notifier).markSeen(order.orderId);
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => OrderDetailPage(summary: order)),
+      MaterialPageRoute(builder: (_) => OrderDetailPage(orderId: order.orderId, summary: order)),
     );
     if (mounted) ref.read(ordersListProvider.notifier).refresh();
   }

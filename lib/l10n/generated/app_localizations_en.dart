@@ -92,8 +92,171 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ordersTitle => 'Orders';
 
   @override
-  String get orderDetailsComingSoon =>
-      'Full order details arrive in the next update.';
+  String get actConfirmOrder => 'Confirm order';
+
+  @override
+  String get actCancelOrder => 'Cancel order';
+
+  @override
+  String get actStartPacking => 'Start packing';
+
+  @override
+  String get actMarkPacked => 'Mark as packed';
+
+  @override
+  String get actReadyForPickup => 'Ready for courier pickup';
+
+  @override
+  String get actMarkShipped => 'Mark as shipped';
+
+  @override
+  String get actOutForDelivery => 'Out for delivery';
+
+  @override
+  String get actMarkDelivered => 'Mark as delivered';
+
+  @override
+  String get actDeliveryFailed => 'Delivery failed';
+
+  @override
+  String get actReschedule => 'Reschedule delivery';
+
+  @override
+  String get actRto => 'Return to hub (RTO)';
+
+  @override
+  String confirmMove(String number, String status) {
+    return 'Order $number will become \"$status\".';
+  }
+
+  @override
+  String get notifyNote => 'The customer gets an automatic message.';
+
+  @override
+  String get courierBookNote =>
+      'This books a SribeesExpress rider to collect the parcel.';
+
+  @override
+  String get cancelNote =>
+      'The order is cancelled and its stock goes back. The app can\'t undo this.';
+
+  @override
+  String get pickupNotRegistered =>
+      'This branch isn\'t registered for SribeesExpress pickup, so the rider may go to another address.';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String statusChanged(String status) {
+    return 'Status updated: $status';
+  }
+
+  @override
+  String get statusChangeFailed => 'Couldn\'t change the status.';
+
+  @override
+  String get readOnlyInfo => 'Your role can view this order but not change it.';
+
+  @override
+  String get noFurtherSteps => 'No further steps from the app for this order.';
+
+  @override
+  String get secCustomer => 'Customer';
+
+  @override
+  String get secAddress => 'Delivery address';
+
+  @override
+  String get secItems => 'Items';
+
+  @override
+  String get secPayment => 'Payment';
+
+  @override
+  String get secHistory => 'History';
+
+  @override
+  String get secNote => 'Customer note';
+
+  @override
+  String get secSlot => 'Delivery slot';
+
+  @override
+  String get call => 'Call';
+
+  @override
+  String get whatsapp => 'WhatsApp';
+
+  @override
+  String get openMaps => 'Open in Maps';
+
+  @override
+  String get cannotOpen => 'No app on this phone can open that.';
+
+  @override
+  String placedAt(String time) {
+    return 'Placed $time';
+  }
+
+  @override
+  String qtyTimes(int qty, String price) {
+    return '$qty × $price';
+  }
+
+  @override
+  String get payCod => 'Cash on delivery';
+
+  @override
+  String get payCard => 'Card';
+
+  @override
+  String get payWallet => 'Wallet';
+
+  @override
+  String get payBank => 'Bank transfer';
+
+  @override
+  String get codToCollect => 'Cash to collect';
+
+  @override
+  String get priceSubtotal => 'Items';
+
+  @override
+  String get priceDelivery => 'Delivery';
+
+  @override
+  String get priceDiscount => 'Discount';
+
+  @override
+  String get priceWallet => 'Paid from wallet';
+
+  @override
+  String get priceTotal => 'Total';
+
+  @override
+  String get orderLoadFailed => 'Couldn\'t load this order.';
+
+  @override
+  String get orderOtherBranch => 'This order belongs to another branch.';
+
+  @override
+  String get stepConfirmed => 'Confirmed';
+
+  @override
+  String get stepPacking => 'Packing';
+
+  @override
+  String get stepPacked => 'Packed';
+
+  @override
+  String get stepCourier => 'Courier';
+
+  @override
+  String get stepOnTheWay => 'On the way';
+
+  @override
+  String get stepDelivered => 'Delivered';
 
   @override
   String get tabAll => 'All';

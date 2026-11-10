@@ -1,7 +1,9 @@
 import 'package:intl/intl.dart';
 
 import '../../core/network/api_exceptions.dart';
+import '../../core/utils/server_clock.dart';
 import '../../l10n/generated/app_localizations.dart';
+import 'models/order_detail.dart';
 import 'models/order_status.dart';
 import 'models/orders_query.dart';
 
@@ -63,6 +65,48 @@ String errorLabel(ApiErrorKind kind, AppLocalizations t) => switch (kind) {
       ApiErrorKind.forbidden => t.errNoOrderAccess,
       _ => t.loadFailed,
     };
+
+/// The server's button label, translated. Keyed by the server's English
+/// label (the workflow's single source of truth); unknown labels show as-is.
+String actionLabel(StatusAction a, AppLocalizations t) => switch (a.label) {
+      'Confirm Order' => t.actConfirmOrder,
+      'Cancel Order' => t.actCancelOrder,
+      'Start Packing' => t.actStartPacking,
+      'Mark as Packed' => t.actMarkPacked,
+      'Ready for Courier Pickup' => t.actReadyForPickup,
+      'Mark as Shipped' => t.actMarkShipped,
+      'Out for Delivery' => t.actOutForDelivery,
+      'Mark as Delivered' => t.actMarkDelivered,
+      'Delivery Failed' => t.actDeliveryFailed,
+      'Reschedule Delivery' => t.actReschedule,
+      'Return to Hub / RTO' => t.actRto,
+      _ => a.label,
+    };
+
+/// Statuses whose transition texts the customer (backend _NOTIFY_STATUSES).
+const customerNotifiedStatuses = {
+  OrderStatus.readyForPickup,
+  OrderStatus.handedToCourier,
+  OrderStatus.shipped,
+  OrderStatus.outForDelivery,
+  OrderStatus.delivered,
+  OrderStatus.deliveryFailed,
+};
+
+String paymentMethodLabel(String? method, AppLocalizations t) => switch (method?.toUpperCase()) {
+      'COD' => t.payCod,
+      'WALLET' => t.payWallet,
+      'MARX_OTHER' || 'MARX_AMEX' => t.payCard,
+      'MARX_BANK' => t.payBank,
+      null => '',
+      _ => method!,
+    };
+
+/// "11 Nov, 2:35 PM" in Asia/Colombo, month names in the app language.
+String colomboDateTime(DateTime? utc, String locale) {
+  if (utc == null) return '';
+  return DateFormat('d MMM, h:mm a', locale).format(toColombo(utc));
+}
 
 /// "Rs 1,250.00"
 String rupees(double amount) => 'Rs ${NumberFormat('#,##0.00', 'en').format(amount)}';
