@@ -11,7 +11,7 @@ import 'core/theme/app_theme.dart';
 import 'features/auth/models/auth_state.dart';
 import 'features/auth/pages/login_page.dart';
 import 'features/auth/providers/auth_provider.dart';
-import 'features/home/pages/home_page.dart';
+import 'features/orders/pages/orders_page.dart';
 import 'l10n/generated/app_localizations.dart';
 
 void main() {
@@ -98,7 +98,7 @@ class _AuthGateState extends ConsumerState<AuthGate> with WidgetsBindingObserver
     final status = ref.watch(authProvider.select((s) => s.status));
     return switch (status) {
       AuthStatus.initial => const _Splash(),
-      AuthStatus.authenticated => const HomePage(),
+      AuthStatus.authenticated => const OrdersPage(),
       // loading during a login attempt keeps the login form on screen
       AuthStatus.loading || AuthStatus.unauthenticated => const LoginPage(),
     };

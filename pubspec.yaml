@@ -5,7 +5,7 @@ publish_to: 'none'
 # NAME+CODE. The APK, the Settings screen and this line must always agree
 # (scripts/verify_build_version.sh checks it on every CI build). Never pass
 # --build-name / --build-number to flutter build; change this line instead.
-version: 0.2.0+2
+version: 0.3.0+3
 
 environment:
   sdk: ^3.13.1

@@ -10,10 +10,14 @@ import 'package:sribees_new_orders/features/auth/models/admin_user.dart';
 import 'package:sribees_new_orders/features/auth/providers/auth_provider.dart';
 import 'package:sribees_new_orders/main.dart';
 
+import 'package:sribees_new_orders/features/orders/providers/orders_list_provider.dart';
+
 import 'helpers/fakes.dart';
+import 'helpers/order_fakes.dart';
 
 late MemoryStorage storage;
 late FakeAuthRepository repo;
+late FakeOrdersRepository ordersRepo;
 
 Future<void> pumpApp(WidgetTester tester) async {
   tester.view.physicalSize = const Size(1080, 2400);
@@ -25,6 +29,7 @@ Future<void> pumpApp(WidgetTester tester) async {
         appVersionProvider.overrideWith((ref) async => '0.2.0+2'),
         secureStorageProvider.overrideWithValue(storage),
         authRepositoryProvider.overrideWithValue(repo),
+        ordersRepositoryProvider.overrideWithValue(ordersRepo),
       ],
       child: const SribeesNewOrdersApp(),
     ),
@@ -45,6 +50,7 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     storage = MemoryStorage();
     repo = FakeAuthRepository(storage);
+    ordersRepo = FakeOrdersRepository();
   });
 
   testWidgets('opens on the Sinhala login screen; DEV ribbon on test builds', (tester) async {
@@ -93,12 +99,14 @@ void main() {
     expect(field().obscureText, isFalse);
   });
 
-  testWidgets('branch manager: login -> home -> settings shows role + branch -> sign out',
+  testWidgets('branch manager: login -> orders -> settings shows role + branch -> sign out',
       (tester) async {
     await pumpApp(tester);
     await signIn(tester);
 
-    expect(find.text('ආයුබෝවන්, Nimal Perera'), findsOneWidget);
+    // Lands on the orders list, New tab, scoped to their branch.
+    expect(find.text('Orders'), findsOneWidget);
+    expect(ordersRepo.calls.last.query.tabKey, 'new');
 
     await tester.tap(find.byKey(const Key('open-settings')));
     await tester.pumpAndSettle();

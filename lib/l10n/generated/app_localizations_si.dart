@@ -89,7 +89,179 @@ class AppLocalizationsSi extends AppLocalizations {
   }
 
   @override
-  String get ordersComingSoon => 'Orders ලැයිස්තුව ඊළඟ update එකෙන් එනවා.';
+  String get ordersTitle => 'Orders';
+
+  @override
+  String get orderDetailsComingSoon =>
+      'Order එකේ සම්පූර්ණ විස්තර ඊළඟ update එකෙන් එනවා.';
+
+  @override
+  String get tabAll => 'සියල්ල';
+
+  @override
+  String get tabNew => 'අලුත්';
+
+  @override
+  String get tabWarehouse => 'ගබඩාව';
+
+  @override
+  String get tabLogistics => 'බෙදාහැරීම';
+
+  @override
+  String get tabDelivered => 'භාරදුන්';
+
+  @override
+  String get tabReturns => 'ආපසු';
+
+  @override
+  String get tabExceptions => 'ගැටලු';
+
+  @override
+  String get pillAll => 'සියල්ල';
+
+  @override
+  String get pillPackedReady => 'පැක් කළා (සූදානම්)';
+
+  @override
+  String get pillQc => 'QC බලන්න තියෙන';
+
+  @override
+  String get statusAwaitingPayment => 'ගෙවීම එනකම්';
+
+  @override
+  String get statusPending => 'පොරොත්තුවෙන්';
+
+  @override
+  String get statusConfirmed => 'තහවුරුයි';
+
+  @override
+  String get statusProcessing => 'සකසමින්';
+
+  @override
+  String get statusPacking => 'පැක් කරමින්';
+
+  @override
+  String get statusPacked => 'පැක් කළා';
+
+  @override
+  String get statusReadyForPickup => 'Courier එනකම්';
+
+  @override
+  String get statusHandedToCourier => 'Courier ට දුන්නා';
+
+  @override
+  String get statusShipped => 'යැව්වා';
+
+  @override
+  String get statusOutForDelivery => 'බෙදාහරිමින්';
+
+  @override
+  String get statusDelivered => 'භාරදුන්නා';
+
+  @override
+  String get statusDeliveryFailed => 'භාරදීම අසාර්ථකයි';
+
+  @override
+  String get statusRtoInitiated => 'ආපහු store එකට';
+
+  @override
+  String get statusCancelled => 'අවලංගුයි';
+
+  @override
+  String get statusReturnRequested => 'ආපසු දෙන්න ඉල්ලලා';
+
+  @override
+  String get statusReturnApproved => 'ආපසු දීම අනුමතයි';
+
+  @override
+  String get statusReturnRejected => 'ආපසු දීම නොපිළිගත්තා';
+
+  @override
+  String get statusRefunded => 'මුදල් ආපසු දුන්නා';
+
+  @override
+  String get paymentPaid => 'ගෙවලා';
+
+  @override
+  String get paymentCod => 'COD';
+
+  @override
+  String get paymentRefunded => 'මුදල් ආපසු';
+
+  @override
+  String get courierNotBooked => 'Courier book වෙලා නෑ';
+
+  @override
+  String get newBadge => 'අලුත්';
+
+  @override
+  String itemCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'භාණ්ඩ $count',
+      one: 'භාණ්ඩ 1',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get agoJustNow => 'දැන්';
+
+  @override
+  String agoMinutes(int n) {
+    return 'මිනිත්තු $nකට කලින්';
+  }
+
+  @override
+  String agoHours(int n) {
+    return 'පැය $nකට කලින්';
+  }
+
+  @override
+  String agoDays(int n) {
+    return 'දින $nකට කලින්';
+  }
+
+  @override
+  String waitingTooLong(int minutes) {
+    return 'මිනිත්තු $minutesක් බලන් ඉන්නවා';
+  }
+
+  @override
+  String get searchHint => 'Order අංකය, පාරිභෝගිකයාගේ නම හෝ email';
+
+  @override
+  String get rangeAll => 'ඕනෑම දිනයක්';
+
+  @override
+  String get rangeToday => 'අද';
+
+  @override
+  String get range7 => 'පසුගිය දින 7';
+
+  @override
+  String get range30 => 'පසුගිය දින 30';
+
+  @override
+  String get branchFilter => 'ශාඛාව';
+
+  @override
+  String get noOrdersHere => 'මෙතන orders නෑ';
+
+  @override
+  String noOrdersForSearch(String query) {
+    return '\"$query\" ට ගැළපෙන orders නෑ';
+  }
+
+  @override
+  String get loadFailed => 'Orders load කරන්න බැරි වුණා.';
+
+  @override
+  String get retry => 'ආයෙ උත්සාහ කරන්න';
+
+  @override
+  String get showingSavedList => 'කලින් load කරපු ලැයිස්තුව පෙන්වනවා.';
 
   @override
   String get settingsTitle => 'සැකසුම්';
