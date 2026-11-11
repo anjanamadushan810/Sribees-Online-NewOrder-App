@@ -3,6 +3,10 @@ import java.util.Properties
 
 plugins {
     id("com.android.application")
+    // New-order alerts arrive through Firebase Messaging. A build without
+    // android/app/google-services.json fails here on purpose: an APK that
+    // cannot ring is worse than no APK.
+    id("com.google.gms.google-services")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }

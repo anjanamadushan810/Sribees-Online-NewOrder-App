@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Must match STAFF_CHANNEL_ID in the backend's staff_order_alert_service.py. -->
+    <string name="new_orders_channel_id" translatable="false">new_orders</string>
+    <string name="new_orders_channel_name">New orders</string>
+    <string name="new_orders_channel_description">Rings when a new order arrives for your branch</string>
+    <!-- Brand magenta, tints the status-bar icon. -->
+    <color name="notification_color">#D81B60</color>
+</resources>

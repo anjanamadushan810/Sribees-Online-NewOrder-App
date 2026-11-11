@@ -10,12 +10,17 @@ import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/models/auth_state.dart';
 import 'features/auth/pages/login_page.dart';
+import 'features/alerts/push_alerts_host.dart';
+import 'features/alerts/push_messaging.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/orders/pages/orders_page.dart';
 import 'l10n/generated/app_localizations.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // New-order alerts. A phone where Firebase cannot start still opens the
+  // app; it just cannot ring (Settings says so).
+  await FirebasePushMessaging.initialize();
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -98,7 +103,7 @@ class _AuthGateState extends ConsumerState<AuthGate> with WidgetsBindingObserver
     final status = ref.watch(authProvider.select((s) => s.status));
     return switch (status) {
       AuthStatus.initial => const _Splash(),
-      AuthStatus.authenticated => const OrdersPage(),
+      AuthStatus.authenticated => const PushAlertsHost(child: OrdersPage()),
       // loading during a login attempt keeps the login form on screen
       AuthStatus.loading || AuthStatus.unauthenticated => const LoginPage(),
     };

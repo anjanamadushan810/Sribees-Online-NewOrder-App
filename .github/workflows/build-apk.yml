@@ -91,6 +91,28 @@ jobs:
             printf 'keyPassword=%s\n' "$KEY_PASSWORD"
           } > android/key.properties
 
+      # New-order alerts. One project-wide config covers both flavors; the
+      # Gradle plugin refuses to build without it, on purpose.
+      - name: Install the Firebase config
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.NEWORDERS_GOOGLE_SERVICES_JSON }}
+        run: |
+          if [ -z "$GOOGLE_SERVICES_JSON" ]; then
+            echo "::error::missing secret NEWORDERS_GOOGLE_SERVICES_JSON"
+            exit 1
+          fi
+          printf '%s' "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
+          python3 - <<'EOF'
+          import json
+          d = json.load(open("android/app/google-services.json"))
+          pkgs = {c["client_info"]["android_client_info"]["package_name"] for c in d["client"]}
+          need = {"com.sribeesonline.sribees_new_orders", "com.sribeesonline.sribees_new_orders.dev"}
+          missing = need - pkgs
+          if missing:
+              raise SystemExit(f"::error::google-services.json lacks {sorted(missing)}")
+          print("Firebase config covers both flavors")
+          EOF
+
       - name: Build release APK
         run: flutter build apk --release --flavor ${{ inputs.flavor }}
 

@@ -10,6 +10,7 @@ import '../models/admin_user.dart';
 import '../models/auth_state.dart';
 import '../models/branch.dart';
 import '../repositories/auth_repository.dart';
+import '../../alerts/push_registrar.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return HttpAuthRepository(
@@ -22,6 +23,8 @@ final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final notifier = AuthNotifier(
     repository: ref.watch(authRepositoryProvider),
     storage: ref.watch(secureStorageProvider),
+    // This phone stops ringing before the session goes.
+    onSignOut: () => ref.read(pushRegistrarProvider).unregister(),
   );
   // A refresh token the server rejects ends the session everywhere.
   ref.watch(apiClientProvider).onUnauthorized = notifier.sessionExpired;
@@ -38,9 +41,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository repository;
   final SecureStorageService storage;
 
+  /// Runs at every sign-out (manual or expired), before local data is cleared.
+  final Future<void> Function()? onSignOut;
+
   AuthNotifier({
     required this.repository,
     required this.storage,
+    this.onSignOut,
     bool restoreOnStart = true,
   }) : super(const AuthState()) {
     if (restoreOnStart) restoreSession();
@@ -118,6 +125,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> logout() async {
     state = state.copyWith(status: AuthStatus.loading);
+    await _stopAlerts();
     await repository.logout();
     await _clearLocal();
     state = const AuthState(status: AuthStatus.unauthenticated);
@@ -125,6 +133,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// The server refused our refresh token: back to the login screen.
   Future<void> sessionExpired() async {
+    await _stopAlerts();
     await _clearLocal();
     if (!mounted) return;
     state = const AuthState(
@@ -182,6 +191,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> _clearLocal() => storage.clearAll();
+
+  Future<void> _stopAlerts() async {
+    try {
+      await onSignOut?.call();
+    } catch (_) {
+      // Never block a sign-out.
+    }
+  }
 
   static AdminUser? _decodeUser(String? raw) {
     if (raw == null || raw.isEmpty) return null;

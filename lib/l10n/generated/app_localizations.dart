@@ -955,6 +955,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
+
+  /// No description provided for @alertsPermissionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ring for new orders?'**
+  String get alertsPermissionTitle;
+
+  /// No description provided for @alertsPermissionBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow notifications so this phone rings the moment a new order arrives for your branch.'**
+  String get alertsPermissionBody;
+
+  /// No description provided for @alertsAllow.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get alertsAllow;
+
+  /// No description provided for @alertsNotNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get alertsNotNow;
+
+  /// No description provided for @newOrderArrived.
+  ///
+  /// In en, this message translates to:
+  /// **'New order #{orderNumber}'**
+  String newOrderArrived(String orderNumber);
+
+  /// No description provided for @newOrderArrivedNoNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'A new order arrived'**
+  String get newOrderArrivedNoNumber;
+
+  /// No description provided for @alertView.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get alertView;
+
+  /// No description provided for @alertsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'New-order alerts'**
+  String get alertsSection;
+
+  /// No description provided for @alertsOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On: this phone rings for new orders'**
+  String get alertsOn;
+
+  /// No description provided for @alertsOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off: notifications are blocked for this app'**
+  String get alertsOff;
+
+  /// No description provided for @alertsOffHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on notifications for Sribees New Orders in the phone\'s Settings.'**
+  String get alertsOffHint;
+
+  /// No description provided for @alertsUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available in this build'**
+  String get alertsUnavailable;
+
+  /// No description provided for @alertsTestSound.
+  ///
+  /// In en, this message translates to:
+  /// **'Test the sound'**
+  String get alertsTestSound;
 }
 
 class _AppLocalizationsDelegate

@@ -7,6 +7,9 @@ import '../../../core/providers/locale_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../alerts/push_alerts_host.dart';
+import '../../alerts/push_messaging.dart';
+import '../../alerts/push_registrar.dart';
 import '../../auth/auth_labels.dart';
 import '../../auth/providers/auth_provider.dart';
 
@@ -139,6 +142,8 @@ class SettingsPage extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 16),
+          const _AlertsCard(),
+          const SizedBox(height: 16),
           Card(
             child: ListTile(
               leading: const Icon(Icons.info_outline_rounded),
@@ -195,6 +200,59 @@ class _InfoRow extends StatelessWidget {
               style: AppTypography.bodyMedium(color: AppColors.ink)),
         ),
       ],
+    );
+  }
+}
+
+/// Whether this phone rings, and a way to hear the ringtone. When alerts are
+/// blocked the how-to sits behind a quiet ⓘ, not a warning line (owner tone).
+class _AlertsCard extends ConsumerWidget {
+  const _AlertsCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = AppLocalizations.of(context);
+    final permission = ref.watch(alertPermissionProvider).valueOrNull;
+    final messaging = ref.watch(pushMessagingProvider);
+
+    final (String status, bool off) = switch (permission) {
+      AlertPermission.granted => (t.alertsOn, false),
+      AlertPermission.denied || AlertPermission.notAsked => (t.alertsOff, true),
+      AlertPermission.unavailable => (t.alertsUnavailable, true),
+      null => ('…', false),
+    };
+
+    return Card(
+      child: Column(
+        children: [
+          ListTile(
+            leading: Icon(
+              off ? Icons.notifications_off_outlined : Icons.notifications_active_outlined,
+              color: off ? AppColors.muted : AppColors.primary,
+            ),
+            title: Text(t.alertsSection),
+            subtitle: Text(status, key: const Key('alerts-status')),
+            trailing: off && permission != AlertPermission.unavailable
+                ? IconButton(
+                    key: const Key('alerts-info'),
+                    icon: const Icon(Icons.info_outline_rounded, size: 20),
+                    color: AppColors.muted,
+                    tooltip: t.alertsOffHint,
+                    onPressed: () => ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(SnackBar(content: Text(t.alertsOffHint))),
+                  )
+                : null,
+          ),
+          if (messaging.available)
+            ListTile(
+              key: const Key('alerts-test-sound'),
+              leading: const Icon(Icons.volume_up_outlined),
+              title: Text(t.alertsTestSound),
+              onTap: () => ref.read(pushRegistrarProvider).messaging.playAlertSound(),
+            ),
+        ],
+      ),
     );
   }
 }

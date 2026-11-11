@@ -13,6 +13,7 @@ class AppConstants {
 
   // Preferences
   static const String prefLanguage = 'sbno_language';
+  static const String prefDeviceId = 'sbno_device_id';
 
   // Network timeouts
   static const Duration connectTimeout = Duration(seconds: 15);

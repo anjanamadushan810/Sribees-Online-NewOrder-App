@@ -179,5 +179,23 @@
   "signOut": "Sign out",
   "signOutConfirmTitle": "Sign out?",
   "signOutConfirmBody": "This phone won't get new-order alerts until you sign in again.",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "alertsPermissionTitle": "Ring for new orders?",
+  "alertsPermissionBody": "Allow notifications so this phone rings the moment a new order arrives for your branch.",
+  "alertsAllow": "Allow",
+  "alertsNotNow": "Not now",
+  "newOrderArrived": "New order #{orderNumber}",
+  "@newOrderArrived": {
+    "placeholders": {
+      "orderNumber": { "type": "String" }
+    }
+  },
+  "newOrderArrivedNoNumber": "A new order arrived",
+  "alertView": "View",
+  "alertsSection": "New-order alerts",
+  "alertsOn": "On: this phone rings for new orders",
+  "alertsOff": "Off: notifications are blocked for this app",
+  "alertsOffHint": "Turn on notifications for Sribees New Orders in the phone's Settings.",
+  "alertsUnavailable": "Not available in this build",
+  "alertsTestSound": "Test the sound"
 }

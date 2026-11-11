@@ -155,5 +155,18 @@
   "signOut": "ලොග් අවුට් වෙන්න",
   "signOutConfirmTitle": "ලොග් අවුට් වෙන්නද?",
   "signOutConfirmBody": "ආයෙ ලොග් වෙනකම් මේ phone එකට අලුත් order alerts එන්නේ නෑ.",
-  "cancel": "එපා"
+  "cancel": "එපා",
+  "alertsPermissionTitle": "අලුත් order එකකට phone එක නාද වෙන්නද?",
+  "alertsPermissionBody": "ඔබේ branch එකට අලුත් order එකක් ආපු ගමන් මේ phone එක නාද වෙන්න notifications වලට ඉඩ දෙන්න.",
+  "alertsAllow": "ඉඩ දෙන්න",
+  "alertsNotNow": "පස්සේ",
+  "newOrderArrived": "අලුත් order එකක් #{orderNumber}",
+  "newOrderArrivedNoNumber": "අලුත් order එකක් ආවා",
+  "alertView": "බලන්න",
+  "alertsSection": "අලුත් order alerts",
+  "alertsOn": "ON: අලුත් order එකකට මේ phone එක නාද වෙනවා",
+  "alertsOff": "OFF: මේ app එකට notifications නවත්වලා",
+  "alertsOffHint": "Phone එකේ Settings වලින් Sribees New Orders app එකට notifications on කරන්න.",
+  "alertsUnavailable": "මේ build එකේ නැහැ",
+  "alertsTestSound": "Sound එක අහලා බලන්න"
 }

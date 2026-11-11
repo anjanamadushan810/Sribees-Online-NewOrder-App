@@ -18,4 +18,7 @@ class ApiEndpoints {
 
   // Orders (same endpoints as the admin web Orders page)
   static const String orders = '/admin/orders';
+
+  // This phone, for new-order alerts
+  static const String staffPushTokens = '/admin/push-tokens';
 }

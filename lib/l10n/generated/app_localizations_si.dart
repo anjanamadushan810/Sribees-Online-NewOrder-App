@@ -477,4 +477,47 @@ class AppLocalizationsSi extends AppLocalizations {
 
   @override
   String get cancel => 'එපා';
+
+  @override
+  String get alertsPermissionTitle => 'අලුත් order එකකට phone එක නාද වෙන්නද?';
+
+  @override
+  String get alertsPermissionBody =>
+      'ඔබේ branch එකට අලුත් order එකක් ආපු ගමන් මේ phone එක නාද වෙන්න notifications වලට ඉඩ දෙන්න.';
+
+  @override
+  String get alertsAllow => 'ඉඩ දෙන්න';
+
+  @override
+  String get alertsNotNow => 'පස්සේ';
+
+  @override
+  String newOrderArrived(String orderNumber) {
+    return 'අලුත් order එකක් #$orderNumber';
+  }
+
+  @override
+  String get newOrderArrivedNoNumber => 'අලුත් order එකක් ආවා';
+
+  @override
+  String get alertView => 'බලන්න';
+
+  @override
+  String get alertsSection => 'අලුත් order alerts';
+
+  @override
+  String get alertsOn => 'ON: අලුත් order එකකට මේ phone එක නාද වෙනවා';
+
+  @override
+  String get alertsOff => 'OFF: මේ app එකට notifications නවත්වලා';
+
+  @override
+  String get alertsOffHint =>
+      'Phone එකේ Settings වලින් Sribees New Orders app එකට notifications on කරන්න.';
+
+  @override
+  String get alertsUnavailable => 'මේ build එකේ නැහැ';
+
+  @override
+  String get alertsTestSound => 'Sound එක අහලා බලන්න';
 }
