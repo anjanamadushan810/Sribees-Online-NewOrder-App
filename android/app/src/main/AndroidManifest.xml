@@ -37,6 +37,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <!-- Someone accepted the order: clear its notification (P8). -->
+        <receiver
+            android:name=".AlertClearReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </receiver>
         <!-- Pushes drawn by the system while the app is in the background.
              The channel itself (with its ringtone) is created in MainActivity. -->
         <meta-data
