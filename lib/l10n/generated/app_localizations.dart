@@ -743,7 +743,7 @@ abstract class AppLocalizations {
   /// No description provided for @courierNotBooked.
   ///
   /// In en, this message translates to:
-  /// **'Courier not booked'**
+  /// **'Not booked with SribeesExpress yet. It is booked when the order is marked ready for pickup.'**
   String get courierNotBooked;
 
   /// No description provided for @newBadge.
@@ -1033,6 +1033,198 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Test the sound'**
   String get alertsTestSound;
+
+  /// No description provided for @secCourier.
+  ///
+  /// In en, this message translates to:
+  /// **'Courier'**
+  String get secCourier;
+
+  /// No description provided for @courierWaybill.
+  ///
+  /// In en, this message translates to:
+  /// **'Waybill'**
+  String get courierWaybill;
+
+  /// No description provided for @courierStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Courier status'**
+  String get courierStatus;
+
+  /// No description provided for @courierCollectFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Collect from'**
+  String get courierCollectFrom;
+
+  /// No description provided for @courierRiderCollects.
+  ///
+  /// In en, this message translates to:
+  /// **'Rider collects'**
+  String get courierRiderCollects;
+
+  /// No description provided for @courierPrepaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid: nothing to collect'**
+  String get courierPrepaid;
+
+  /// No description provided for @courierCashCollected.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash collected'**
+  String get courierCashCollected;
+
+  /// No description provided for @courierCashNotYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not collected yet'**
+  String get courierCashNotYet;
+
+  /// No description provided for @courierShortfall.
+  ///
+  /// In en, this message translates to:
+  /// **'not collected'**
+  String get courierShortfall;
+
+  /// No description provided for @courierHandover.
+  ///
+  /// In en, this message translates to:
+  /// **'Handover code'**
+  String get courierHandover;
+
+  /// No description provided for @courierHandoverWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting the customer\'s code'**
+  String get courierHandoverWaiting;
+
+  /// No description provided for @courierHandoverDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get courierHandoverDone;
+
+  /// No description provided for @courierBookingFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The pickup booking was refused. Try again, or check the order on the admin web.'**
+  String get courierBookingFailed;
+
+  /// No description provided for @courierRequestPickup.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready for courier pickup'**
+  String get courierRequestPickup;
+
+  /// No description provided for @courierRetryBooking.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry booking'**
+  String get courierRetryBooking;
+
+  /// No description provided for @courierRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh tracking'**
+  String get courierRefresh;
+
+  /// No description provided for @courierLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get courierLabel;
+
+  /// No description provided for @courierLabelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping label'**
+  String get courierLabelTitle;
+
+  /// No description provided for @courierPickupConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready for courier pickup?'**
+  String get courierPickupConfirmTitle;
+
+  /// No description provided for @courierPickupConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'SribeesExpress will send a rider to collect this parcel.'**
+  String get courierPickupConfirmBody;
+
+  /// No description provided for @courierUnregisteredNote.
+  ///
+  /// In en, this message translates to:
+  /// **'This branch is not registered as a pickup point, so the rider goes to the main account\'s address.'**
+  String get courierUnregisteredNote;
+
+  /// No description provided for @courierFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach SribeesExpress.'**
+  String get courierFailed;
+
+  /// No description provided for @trackBooked.
+  ///
+  /// In en, this message translates to:
+  /// **'Booked: awaiting rider'**
+  String get trackBooked;
+
+  /// No description provided for @trackPickedUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Picked up'**
+  String get trackPickedUp;
+
+  /// No description provided for @trackInTransit.
+  ///
+  /// In en, this message translates to:
+  /// **'In transit'**
+  String get trackInTransit;
+
+  /// No description provided for @trackOutForDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Out for delivery'**
+  String get trackOutForDelivery;
+
+  /// No description provided for @trackDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get trackDelivered;
+
+  /// No description provided for @trackFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery failed'**
+  String get trackFailed;
+
+  /// No description provided for @trackReturned.
+  ///
+  /// In en, this message translates to:
+  /// **'Returned to us'**
+  String get trackReturned;
+
+  /// No description provided for @trackCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get trackCancelled;
+
+  /// No description provided for @trackNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Not tracked yet'**
+  String get trackNone;
+
+  /// No description provided for @labelLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'No label yet. This parcel has no waybill: request a pickup first.'**
+  String get labelLoadFailed;
 }
 
 class _AppLocalizationsDelegate

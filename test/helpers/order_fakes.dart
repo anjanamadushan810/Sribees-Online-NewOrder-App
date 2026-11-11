@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:sribees_new_orders/features/orders/models/courier_info.dart';
 import 'package:sribees_new_orders/features/orders/models/order_detail.dart';
 import 'package:sribees_new_orders/features/orders/models/order_summary.dart';
 import 'package:sribees_new_orders/features/orders/models/orders_query.dart';
@@ -177,5 +178,57 @@ class FakeOrdersRepository implements OrdersRepository {
     final e = error;
     if (e != null) throw e;
     return pages[page] ?? pageOf(const []);
+  }
+
+  // ---- courier (P6) ----
+  final courierCalls = <String>[];
+  Object? courierError;
+  String courierMessage = 'Pickup requested';
+
+  /// What the next detail load returns after a successful courier call.
+  Map<String, dynamic>? detailAfterCourier;
+
+  Map<String, dynamic> labelJson = {
+    'waybill_id': 'SXP123456',
+    'order_number': 'SB-1',
+    'booked_at': '2026-11-10T08:00:00Z',
+    'sender_name': 'Sribees Matugama',
+    'sender_phone': '0341234567',
+    'recipient_name': 'Kamal Silva',
+    'recipient_phone': '0771234567',
+    'recipient_address': '12 Temple Rd, Matugama',
+    'destination_city': 'Matugama',
+    'destination_district': 'Kalutara',
+    'postal_code': '12100',
+    'weight_kg': '1.20',
+    'cod_amount': '1250.00',
+    'is_cod': true,
+    'delivery_charge': '250.00',
+    'item_count': 3,
+    'status_name': 'Booked',
+    'requires_handover_code': false,
+    'tracking_url': null,
+  };
+  Object? labelError;
+
+  Future<String> _courier(String what) async {
+    courierCalls.add(what);
+    final e = courierError;
+    if (e != null) throw e;
+    if (detailAfterCourier != null) detailJson = detailAfterCourier!;
+    return courierMessage;
+  }
+
+  @override
+  Future<String> requestPickup(String orderId) => _courier('pickup');
+
+  @override
+  Future<String> refreshCourier(String orderId) => _courier('refresh');
+
+  @override
+  Future<CourierLabel> courierLabel(String orderId) async {
+    final e = labelError;
+    if (e != null) throw e;
+    return CourierLabel.fromJson(labelJson);
   }
 }

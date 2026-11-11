@@ -352,7 +352,8 @@ class AppLocalizationsSi extends AppLocalizations {
   String get paymentRefunded => 'මුදල් ආපසු';
 
   @override
-  String get courierNotBooked => 'Courier book වෙලා නෑ';
+  String get courierNotBooked =>
+      'තාම SribeesExpress එකේ book කරලා නැහැ. Order එක pickup එකට ලෑස්තියි කියලා දැම්මම book වෙනවා.';
 
   @override
   String get newBadge => 'අලුත්';
@@ -520,4 +521,104 @@ class AppLocalizationsSi extends AppLocalizations {
 
   @override
   String get alertsTestSound => 'Sound එක අහලා බලන්න';
+
+  @override
+  String get secCourier => 'Courier';
+
+  @override
+  String get courierWaybill => 'Waybill';
+
+  @override
+  String get courierStatus => 'Courier තත්ත්වය';
+
+  @override
+  String get courierCollectFrom => 'ගන්න තැන';
+
+  @override
+  String get courierRiderCollects => 'Rider ගන්න මුදල';
+
+  @override
+  String get courierPrepaid => 'ගෙවලා ඉවරයි: ගන්න දෙයක් නැහැ';
+
+  @override
+  String get courierCashCollected => 'මුදල් ලැබුණා';
+
+  @override
+  String get courierCashNotYet => 'තාම ලැබිලා නැහැ';
+
+  @override
+  String get courierShortfall => 'ලැබුණේ නැහැ';
+
+  @override
+  String get courierHandover => 'Handover code';
+
+  @override
+  String get courierHandoverWaiting => 'Customer ගේ code එක එනකම්';
+
+  @override
+  String get courierHandoverDone => 'තහවුරුයි';
+
+  @override
+  String get courierBookingFailed =>
+      'Pickup booking එක ප්‍රතික්ෂේප වුණා. ආයේ උත්සාහ කරන්න, නැත්නම් admin web එකේ බලන්න.';
+
+  @override
+  String get courierRequestPickup => 'Courier pickup එකට ලෑස්තියි';
+
+  @override
+  String get courierRetryBooking => 'ආයේ book කරන්න';
+
+  @override
+  String get courierRefresh => 'Tracking අලුත් කරන්න';
+
+  @override
+  String get courierLabel => 'Label';
+
+  @override
+  String get courierLabelTitle => 'Shipping label';
+
+  @override
+  String get courierPickupConfirmTitle => 'Courier pickup එකට ලෑස්තිද?';
+
+  @override
+  String get courierPickupConfirmBody =>
+      'මේ parcel එක ගන්න SribeesExpress rider කෙනෙක් එවනවා.';
+
+  @override
+  String get courierUnregisteredNote =>
+      'මේ branch එක pickup point එකක් විදියට register කරලා නැති නිසා rider යන්නේ ප්‍රධාන account එකේ ලිපිනයට.';
+
+  @override
+  String get courierFailed => 'SribeesExpress එකට සම්බන්ධ වෙන්න බැරි වුණා.';
+
+  @override
+  String get trackBooked => 'Book කළා: rider එනකම්';
+
+  @override
+  String get trackPickedUp => 'Rider අරගෙන ගියා';
+
+  @override
+  String get trackInTransit => 'ගමනේ';
+
+  @override
+  String get trackOutForDelivery => 'Deliver කරන්න ගිහින්';
+
+  @override
+  String get trackDelivered => 'Deliver කළා';
+
+  @override
+  String get trackFailed => 'Delivery අසාර්ථකයි';
+
+  @override
+  String get trackReturned => 'ආපහු ආවා';
+
+  @override
+  String get trackCancelled => 'අවලංගුයි';
+
+  @override
+  String get trackNone => 'තාම track වෙලා නැහැ';
+
+  @override
+  String get labelLoadFailed =>
+      'තාම label එකක් නැහැ. Waybill එකක් නැහැ: මුලින්ම pickup එකක් ඉල්ලන්න.';
 }

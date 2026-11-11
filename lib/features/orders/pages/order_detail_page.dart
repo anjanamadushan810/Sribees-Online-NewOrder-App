@@ -14,6 +14,7 @@ import '../models/order_status.dart';
 import '../models/order_summary.dart';
 import '../order_labels.dart';
 import '../providers/order_detail_provider.dart';
+import '../widgets/courier_section.dart';
 import '../widgets/status_chip.dart';
 
 /// Hands a link to the phone's own app (dialer, WhatsApp, Maps); tests swap
@@ -285,6 +286,10 @@ class _DetailBody extends ConsumerWidget {
             title: t.secNote,
             child: Text(order.notes!, style: AppTypography.bodyMedium(color: AppColors.ink)),
           ),
+
+        // SribeesExpress: pickup, tracking, label, COD collected (P6)
+        if (order.courier != null)
+          _Section(title: t.secCourier, child: CourierSection(order: order)),
 
         // Items
         _Section(

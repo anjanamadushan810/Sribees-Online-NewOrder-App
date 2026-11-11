@@ -101,6 +101,23 @@ class OrderDetailNotifier extends StateNotifier<OrderDetailState> {
       if (mounted) state = state.copyWith(clearApplying: true);
     }
   }
+
+  /// Courier buttons (P6). Same "reload whatever happened" rule as [apply];
+  /// [Applied] carries nothing, the server's words come back in [message].
+  Future<(ApplyResult, String)> courier(Future<String> Function(String orderId) call, String busyKey) async {
+    if (state.applying != null) return (const Refused('busy', ApiErrorKind.unknown), '');
+    state = state.copyWith(applying: busyKey);
+    try {
+      final message = await call(orderId);
+      await load();
+      return (const Applied(), message);
+    } on ApiException catch (e) {
+      await load();
+      return (Refused(e.message, e.kind), e.message);
+    } finally {
+      if (mounted) state = state.copyWith(clearApplying: true);
+    }
+  }
 }
 
 final orderDetailProvider = StateNotifierProvider.autoDispose

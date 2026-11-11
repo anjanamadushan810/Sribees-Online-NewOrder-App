@@ -1,4 +1,5 @@
 import '../../../core/config/app_env.dart';
+import 'courier_info.dart';
 import 'order_status.dart';
 
 double _d(Object? v) => (v as num?)?.toDouble() ?? 0;
@@ -134,6 +135,9 @@ class OrderDetail {
   final String? courierWaybill;
   final String? courierBookingStatus;
 
+  /// The whole courier block (P6: pickup, tracking, label, COD collected).
+  final CourierInfo? courier;
+
   const OrderDetail({
     required this.orderId,
     required this.orderNumber,
@@ -158,6 +162,7 @@ class OrderDetail {
     this.branchPickupRegistered = true,
     this.courierWaybill,
     this.courierBookingStatus,
+    this.courier,
   });
 
   bool get isPaid => paymentStatus == 'paid';
@@ -218,6 +223,7 @@ class OrderDetail {
       branchPickupRegistered: courier['branch_pickup_registered'] != false,
       courierWaybill: _s(courier['waybill']),
       courierBookingStatus: _s(courier['booking_status']),
+      courier: j['courier'] is Map ? CourierInfo.fromJson(Map<String, dynamic>.from(courier)) : null,
     );
   }
 }

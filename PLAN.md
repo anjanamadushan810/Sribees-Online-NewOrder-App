@@ -118,7 +118,7 @@ without `orders:update` sees no action buttons.
 
 ### P4 — Staff push — backend (`fastapi_backend`, `development` worktree)
 
-1. **Migration 107_admin_push_tokens.sql** (replay-safe, `IF NOT EXISTS`):
+1. **Migration 109_admin_push_tokens.sql** (107/108 were taken by then) (replay-safe, `IF NOT EXISTS`):
    - `admin_push_tokens(token_id, admin_id FK admins ON DELETE CASCADE, token UNIQUE,
      device_id, platform, app_name default 'new_orders', language 'si'|'en',
      is_active, created_at, updated_at, last_seen_at)`.
@@ -146,7 +146,7 @@ without `orders:update` sees no action buttons.
    FCM raising → order still created; token re-bind on another admin's login.
 
 **Done:** new tests + full suite green on Python 3.11, `ruff check .` clean,
-migration 107 replays twice on a throwaway Postgres 18; fresh-context
+migration 109 replays twice on a throwaway Postgres 18; fresh-context
 reviewer agent signs off (max 3 rounds); deployed to dev.
 
 ### P5 — Push in the app
@@ -176,7 +176,7 @@ label opens and shares as PDF; admin web shows the same booking.
 
 ### P7 — Release to prod (ask the owner first)
 
-- Owner MCQ: promote backend `development` → `main` (migration 107 + alert
+- Owner MCQ: promote backend `development` → `main` (migration 109 + alert
   hook) and deploy prod; build the prod-flavor APK.
 - Install on the branch phones; first real order watched live.
 

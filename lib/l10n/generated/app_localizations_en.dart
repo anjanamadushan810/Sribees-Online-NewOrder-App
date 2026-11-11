@@ -352,7 +352,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentRefunded => 'Refunded';
 
   @override
-  String get courierNotBooked => 'Courier not booked';
+  String get courierNotBooked =>
+      'Not booked with SribeesExpress yet. It is booked when the order is marked ready for pickup.';
 
   @override
   String get newBadge => 'NEW';
@@ -520,4 +521,104 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get alertsTestSound => 'Test the sound';
+
+  @override
+  String get secCourier => 'Courier';
+
+  @override
+  String get courierWaybill => 'Waybill';
+
+  @override
+  String get courierStatus => 'Courier status';
+
+  @override
+  String get courierCollectFrom => 'Collect from';
+
+  @override
+  String get courierRiderCollects => 'Rider collects';
+
+  @override
+  String get courierPrepaid => 'Paid: nothing to collect';
+
+  @override
+  String get courierCashCollected => 'Cash collected';
+
+  @override
+  String get courierCashNotYet => 'Not collected yet';
+
+  @override
+  String get courierShortfall => 'not collected';
+
+  @override
+  String get courierHandover => 'Handover code';
+
+  @override
+  String get courierHandoverWaiting => 'Awaiting the customer\'s code';
+
+  @override
+  String get courierHandoverDone => 'Verified';
+
+  @override
+  String get courierBookingFailed =>
+      'The pickup booking was refused. Try again, or check the order on the admin web.';
+
+  @override
+  String get courierRequestPickup => 'Ready for courier pickup';
+
+  @override
+  String get courierRetryBooking => 'Retry booking';
+
+  @override
+  String get courierRefresh => 'Refresh tracking';
+
+  @override
+  String get courierLabel => 'Label';
+
+  @override
+  String get courierLabelTitle => 'Shipping label';
+
+  @override
+  String get courierPickupConfirmTitle => 'Ready for courier pickup?';
+
+  @override
+  String get courierPickupConfirmBody =>
+      'SribeesExpress will send a rider to collect this parcel.';
+
+  @override
+  String get courierUnregisteredNote =>
+      'This branch is not registered as a pickup point, so the rider goes to the main account\'s address.';
+
+  @override
+  String get courierFailed => 'Could not reach SribeesExpress.';
+
+  @override
+  String get trackBooked => 'Booked: awaiting rider';
+
+  @override
+  String get trackPickedUp => 'Picked up';
+
+  @override
+  String get trackInTransit => 'In transit';
+
+  @override
+  String get trackOutForDelivery => 'Out for delivery';
+
+  @override
+  String get trackDelivered => 'Delivered';
+
+  @override
+  String get trackFailed => 'Delivery failed';
+
+  @override
+  String get trackReturned => 'Returned to us';
+
+  @override
+  String get trackCancelled => 'Cancelled';
+
+  @override
+  String get trackNone => 'Not tracked yet';
+
+  @override
+  String get labelLoadFailed =>
+      'No label yet. This parcel has no waybill: request a pickup first.';
 }

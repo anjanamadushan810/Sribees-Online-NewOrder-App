@@ -1,6 +1,7 @@
 import '../../../core/constants/api_endpoints.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/utils/server_clock.dart';
+import '../models/courier_info.dart';
 import '../models/order_detail.dart';
 import '../models/order_summary.dart';
 import '../models/orders_query.dart';
@@ -16,6 +17,16 @@ abstract class OrdersRepository {
   /// Standard transition through the server's state machine. Returns the
   /// updated order (without the courier block, so callers reload).
   Future<void> updateStatus(String orderId, String targetStatus);
+
+  /// Ask SribeesExpress to collect (or retry a failed booking). Idempotent on
+  /// the server. Returns the server's message.
+  Future<String> requestPickup(String orderId);
+
+  /// Re-read this shipment from SribeesExpress. Returns the server's message.
+  Future<String> refreshCourier(String orderId);
+
+  /// Label rows for a booked parcel (404 until there is a waybill).
+  Future<CourierLabel> courierLabel(String orderId);
 }
 
 class HttpOrdersRepository implements OrdersRepository {
@@ -81,4 +92,25 @@ class HttpOrdersRepository implements OrdersRepository {
       data: {'status': targetStatus},
     );
   }
+
+  @override
+  Future<String> requestPickup(String orderId) async {
+    final r = await apiClient.post('${ApiEndpoints.orders}/$orderId/courier/request-pickup');
+    return _message(r.data);
+  }
+
+  @override
+  Future<String> refreshCourier(String orderId) async {
+    final r = await apiClient.post('${ApiEndpoints.orders}/$orderId/courier/refresh');
+    return _message(r.data);
+  }
+
+  @override
+  Future<CourierLabel> courierLabel(String orderId) async {
+    final r = await apiClient.get('${ApiEndpoints.orders}/$orderId/courier/label');
+    return CourierLabel.fromJson(Map<String, dynamic>.from(_data(r.data)));
+  }
+
+  static String _message(dynamic body) =>
+      (body is Map && body['message'] != null) ? body['message'].toString() : '';
 }
