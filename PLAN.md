@@ -183,7 +183,39 @@ label opens and shares as PDF; admin web shows the same booking.
 **Done:** prod deploy run green; one real (or owner-placed COD) prod order
 rings every branch phone and the super admin's; APK version check passes.
 
+### P8 — Ring until accepted (owner interview 2026-11-11)
+
+Owner decisions:
+- **Accepted** = the order leaves `pending` (Confirm, or any later status,
+  or cancelled), from the app OR the admin web. Opening it is not enough.
+- One person accepting stops the ringing on **every** phone.
+- Not accepted: ring again **every 2 min for 30 min** (max 15 rings), then stop.
+- **Night 22:00–07:00 Colombo**: ring once on arrival only; at **07:00** every
+  order still `pending` starts ringing again (same 2 min / 30 min rule).
+
+Backend (`fastapi_backend`, development first):
+1. Migration 110 (next free; re-check): `admin_order_alerts` gains
+   `rings INT`, `next_ring_at TIMESTAMPTZ`, `stopped_at TIMESTAMPTZ`.
+2. A scheduler job every minute: orders with an alert row, `stopped_at IS NULL`,
+   `next_ring_at <= now()` → if status is no longer `pending` → stop; else
+   re-send (same recipients rule) and schedule the next ring (or stop after 30
+   min / 15 rings; inside night hours push `next_ring_at` to 07:00 Colombo).
+   Multi-worker safe: `FOR UPDATE SKIP LOCKED`.
+3. On accept (status leaves pending): stop + a silent data push
+   `{type: order_accepted, order_id}` so phones clear the notification.
+4. Tests on the real schema: re-ring cadence, stop on confirm (app and admin
+   web path), 30-min cap, night hold + 07:00 restart, two workers ring once.
+
+App:
+- Each ring replaces the previous notification for that order (same tag), so
+  the shade holds one per order. `order_accepted` data push clears it.
+
+**Done:** on dev, a COD order not confirmed rings the emulator 3 times in
+~5 min; confirming it from the admin web stops the next ring and clears the
+notification; a night-time order rings once and again at 07:00 (tested with a
+fake clock); full suite + migration replay x2 green; fresh reviewer signs off.
+
 ## Out of v1 (later)
 
 Returns approve/reject, escalations, status override, CSV/PDF export, iOS,
-Play Store listing, Bluetooth label printer, repeating alarm until accepted.
+Play Store listing, Bluetooth label printer.
