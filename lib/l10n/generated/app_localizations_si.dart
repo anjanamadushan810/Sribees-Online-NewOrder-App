@@ -621,4 +621,13 @@ class AppLocalizationsSi extends AppLocalizations {
   @override
   String get labelLoadFailed =>
       'තාම label එකක් නැහැ. Waybill එකක් නැහැ: මුලින්ම pickup එකක් ඉල්ලන්න.';
+
+  @override
+  String get alertsServerOk => 'සම්බන්ධයි: server එක මේ phone එක දන්නවා';
+
+  @override
+  String get alertsServerFailed => 'සම්බන්ධ නැහැ: මේ phone එක නාද වෙන්නේ නැහැ';
+
+  @override
+  String get alertsRetry => 'ආයේ උත්සාහ කරන්න';
 }

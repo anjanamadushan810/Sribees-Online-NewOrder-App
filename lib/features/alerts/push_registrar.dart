@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/constants/api_endpoints.dart';
 import '../../core/network/api_client.dart';
+import '../../core/network/api_exceptions.dart';
 import '../../core/providers/core_providers.dart';
 import 'push_messaging.dart';
 
@@ -43,31 +45,75 @@ class HttpStaffDevicesApi implements StaffDevicesApi {
   }
 }
 
+/// Whether this phone is registered with the server for alerts.
+class PushStatus {
+  const PushStatus.unknown() : ok = false, reason = null, known = false;
+  const PushStatus.ok() : ok = true, reason = null, known = true;
+  const PushStatus.failed(this.reason) : ok = false, known = true;
+
+  final bool ok;
+  final bool known;
+  final String? reason;
+}
+
 /// Tells the server which phone to ring, and stops it on sign-out.
 class PushRegistrar {
-  PushRegistrar({required this.messaging, required this.api});
+  PushRegistrar({
+    required this.messaging,
+    required this.api,
+    this.retryDelays = const [Duration(seconds: 3), Duration(seconds: 10), Duration(seconds: 30)],
+  });
 
   final PushMessaging messaging;
   final StaffDevicesApi api;
 
-  /// Register this install for the signed-in admin. Safe to call again (token
-  /// refresh, language change): the server upserts. Returns false when the
-  /// phone cannot receive alerts (no Firebase, no permission, no token).
+  /// Waits between attempts. A first launch often races Google Play services
+  /// for the FCM token; tests pass none.
+  final List<Duration> retryDelays;
+
+  /// What the last attempt found, for Settings. A phone that cannot ring must
+  /// say so and why -- a silent failure here once looked like "alerts don't
+  /// work" with nothing to go on.
+  final status = ValueNotifier<PushStatus>(const PushStatus.unknown());
+
+  /// Register this install for the signed-in admin, retrying a few times.
+  /// Safe to call again (token refresh, language change, resume): the server
+  /// upserts. Returns false when the phone still cannot receive alerts.
   Future<bool> register({required String language, String? token}) async {
-    if (!messaging.available) return false;
+    if (!messaging.available) {
+      status.value = const PushStatus.failed('Firebase did not start on this phone');
+      return false;
+    }
+    for (var attempt = 0;; attempt++) {
+      final result = await _registerOnce(language: language, token: token);
+      status.value = result;
+      if (result.ok || attempt >= retryDelays.length) return result.ok;
+      await Future<void>.delayed(retryDelays[attempt]);
+    }
+  }
+
+  Future<PushStatus> _registerOnce({required String language, String? token}) async {
+    String? t = token;
+    if (t == null || t.isEmpty) {
+      try {
+        t = await messaging.token();
+      } catch (e) {
+        return PushStatus.failed('FCM token: $e');
+      }
+    }
+    if (t == null || t.isEmpty) return const PushStatus.failed('FCM gave no token');
     try {
-      final t = token ?? await messaging.token();
-      if (t == null || t.isEmpty) return false;
       await api.register(
         token: t,
         deviceId: await messaging.deviceId(),
         platform: messaging.platform,
         language: language,
       );
-      return true;
-    } catch (_) {
-      // Offline or server trouble: the next resume / token refresh retries.
-      return false;
+      return const PushStatus.ok();
+    } on ApiException catch (e) {
+      return PushStatus.failed('Server ${e.statusCode ?? e.kind.name}: ${e.message}');
+    } catch (e) {
+      return PushStatus.failed('Server: $e');
     }
   }
 

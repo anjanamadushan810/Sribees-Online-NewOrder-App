@@ -244,6 +244,32 @@ class _AlertsCard extends ConsumerWidget {
                   )
                 : null,
           ),
+          ValueListenableBuilder<PushStatus>(
+            valueListenable: ref.read(pushRegistrarProvider).status,
+            builder: (context, s, _) => !s.known
+                ? const SizedBox.shrink()
+                : ListTile(
+                    key: const Key('alerts-server'),
+                    leading: Icon(
+                      s.ok ? Icons.cloud_done_outlined : Icons.cloud_off_outlined,
+                      color: s.ok ? AppColors.success : AppColors.error,
+                    ),
+                    title: Text(s.ok ? t.alertsServerOk : t.alertsServerFailed),
+                    subtitle: s.ok || s.reason == null
+                        ? null
+                        : Text(s.reason!, key: const Key('alerts-server-reason'),
+                            style: AppTypography.bodySmall(color: AppColors.muted)),
+                    trailing: s.ok
+                        ? null
+                        : TextButton(
+                            key: const Key('alerts-retry'),
+                            onPressed: () => ref.read(pushRegistrarProvider).register(
+                                  language: ref.read(localeProvider).languageCode,
+                                ),
+                            child: Text(t.alertsRetry),
+                          ),
+                  ),
+          ),
           if (messaging.available)
             ListTile(
               key: const Key('alerts-test-sound'),

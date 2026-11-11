@@ -201,5 +201,8 @@
   "trackReturned": "ආපහු ආවා",
   "trackCancelled": "අවලංගුයි",
   "trackNone": "තාම track වෙලා නැහැ",
-  "labelLoadFailed": "තාම label එකක් නැහැ. Waybill එකක් නැහැ: මුලින්ම pickup එකක් ඉල්ලන්න."
+  "labelLoadFailed": "තාම label එකක් නැහැ. Waybill එකක් නැහැ: මුලින්ම pickup එකක් ඉල්ලන්න.",
+  "alertsServerOk": "සම්බන්ධයි: server එක මේ phone එක දන්නවා",
+  "alertsServerFailed": "සම්බන්ධ නැහැ: මේ phone එක නාද වෙන්නේ නැහැ",
+  "alertsRetry": "ආයේ උත්සාහ කරන්න"
 }

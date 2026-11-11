@@ -230,5 +230,8 @@
   "trackReturned": "Returned to us",
   "trackCancelled": "Cancelled",
   "trackNone": "Not tracked yet",
-  "labelLoadFailed": "No label yet. This parcel has no waybill: request a pickup first."
+  "labelLoadFailed": "No label yet. This parcel has no waybill: request a pickup first.",
+  "alertsServerOk": "Connected: the server knows this phone",
+  "alertsServerFailed": "Not connected: this phone will not ring",
+  "alertsRetry": "Try again"
 }

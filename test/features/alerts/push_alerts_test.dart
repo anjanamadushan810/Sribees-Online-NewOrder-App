@@ -45,7 +45,7 @@ void main() {
     setUp(() {
       messaging = FakePushMessaging();
       api = FakeStaffDevicesApi();
-      registrar = PushRegistrar(messaging: messaging, api: api);
+      registrar = PushRegistrar(messaging: messaging, api: api, retryDelays: const []);
     });
 
     test('registers token, install id, platform and language', () async {
@@ -78,6 +78,29 @@ void main() {
       api.failWith = ApiException(message: 'expired', statusCode: 401, kind: ApiErrorKind.unauthorized);
       await registrar.unregister();
       expect(messaging.deleteTokenCalls, 1);
+    });
+
+    test('a failure is retried and its reason kept for Settings', () async {
+      final flaky = _FlakyApi(failures: 2);
+      final r = PushRegistrar(
+        messaging: messaging,
+        api: flaky,
+        retryDelays: const [Duration.zero, Duration.zero, Duration.zero],
+      );
+      expect(await r.register(language: 'si'), isTrue);
+      expect(flaky.calls, 3);
+      expect(r.status.value.ok, isTrue);
+
+      final dead = PushRegistrar(messaging: messaging, api: _FlakyApi(failures: 99), retryDelays: const []);
+      expect(await dead.register(language: 'si'), isFalse);
+      expect(dead.status.value.ok, isFalse);
+      expect(dead.status.value.reason, contains('Server 503'));
+    });
+
+    test('no FCM token is reported, not swallowed', () async {
+      messaging.currentToken = null;
+      await registrar.register(language: 'si');
+      expect(registrar.status.value.reason, 'FCM gave no token');
     });
 
     test('sign-out tells the server which install stops', () async {
@@ -142,7 +165,7 @@ void main() {
           secureStorageProvider.overrideWithValue(storage),
           authRepositoryProvider.overrideWithValue(FakeAuthRepository(storage)),
           ordersRepositoryProvider.overrideWithValue(ordersRepo),
-          pushRegistrarProvider.overrideWithValue(PushRegistrar(messaging: messaging, api: api)),
+          pushRegistrarProvider.overrideWithValue(PushRegistrar(messaging: messaging, api: api, retryDelays: const [])),
           pushMessagingProvider.overrideWithValue(messaging),
         ],
         child: const SribeesNewOrdersApp(),
@@ -232,12 +255,31 @@ void main() {
       expect(messaging.soundCalls, 1);
     });
 
+    testWidgets('Settings says when the server does not know this phone, and retries', (tester) async {
+      messaging.current = messaging.answer;
+      api.failWith = ApiException(message: 'Service unavailable', statusCode: 503, kind: ApiErrorKind.server);
+      await pumpSignedIn(tester);
+      await tester.tap(find.byIcon(Icons.settings_outlined));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('alerts-server-reason')), findsOneWidget);
+      api.failWith = null;
+      await tester.ensureVisible(find.byKey(const Key('alerts-retry')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('alerts-retry')));
+      await tester.pumpAndSettle();
+      expect(api.registered, isNotEmpty);
+      expect(find.byKey(const Key('alerts-retry')), findsNothing);
+      expect(find.byIcon(Icons.cloud_done_outlined), findsOneWidget);
+    });
+
     testWidgets('signing out stops this phone', (tester) async {
       messaging.current = messaging.answer;
       await pumpSignedIn(tester);
       await tester.tap(find.byIcon(Icons.settings_outlined));
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.byKey(const Key('signout')));
+      await tester.scrollUntilVisible(find.byKey(const Key('signout')), 200,
+          scrollable: find.byType(Scrollable).last);
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('signout')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('signout-confirm')));
@@ -246,4 +288,26 @@ void main() {
       expect(messaging.deleteTokenCalls, 1);
     });
   });
+}
+
+class _FlakyApi implements StaffDevicesApi {
+  _FlakyApi({required this.failures});
+  int failures;
+  int calls = 0;
+
+  @override
+  Future<void> register({
+    required String token,
+    required String deviceId,
+    required String platform,
+    required String language,
+  }) async {
+    calls++;
+    if (failures-- > 0) {
+      throw ApiException(message: 'Service unavailable', statusCode: 503, kind: ApiErrorKind.server);
+    }
+  }
+
+  @override
+  Future<void> unregister(String deviceId) async {}
 }

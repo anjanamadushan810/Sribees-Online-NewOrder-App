@@ -1225,6 +1225,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No label yet. This parcel has no waybill: request a pickup first.'**
   String get labelLoadFailed;
+
+  /// No description provided for @alertsServerOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected: the server knows this phone'**
+  String get alertsServerOk;
+
+  /// No description provided for @alertsServerFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not connected: this phone will not ring'**
+  String get alertsServerFailed;
+
+  /// No description provided for @alertsRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get alertsRetry;
 }
 
 class _AppLocalizationsDelegate

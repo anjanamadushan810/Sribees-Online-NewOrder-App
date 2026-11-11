@@ -621,4 +621,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get labelLoadFailed =>
       'No label yet. This parcel has no waybill: request a pickup first.';
+
+  @override
+  String get alertsServerOk => 'Connected: the server knows this phone';
+
+  @override
+  String get alertsServerFailed => 'Not connected: this phone will not ring';
+
+  @override
+  String get alertsRetry => 'Try again';
 }
