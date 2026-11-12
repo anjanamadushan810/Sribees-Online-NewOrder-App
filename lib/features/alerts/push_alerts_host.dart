@@ -8,6 +8,7 @@ import '../../core/providers/locale_provider.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../orders/pages/order_detail_page.dart';
 import '../orders/providers/orders_list_provider.dart';
+import 'alert_health.dart';
 import 'new_order_alert.dart';
 import 'push_messaging.dart';
 import 'push_registrar.dart';
@@ -65,6 +66,7 @@ class _PushAlertsHostState extends ConsumerState<PushAlertsHost> {
       final yes = await _askWhy();
       if (yes == true) await _messaging.requestPermission();
       ref.invalidate(alertPermissionProvider);
+      ref.invalidate(alertHealthProvider);
     }
     if (!mounted) return;
     await _registrar.register(language: _language);
@@ -74,9 +76,11 @@ class _PushAlertsHostState extends ConsumerState<PushAlertsHost> {
     ));
     _subs.add(_messaging.onForegroundAlert.listen(_onForeground));
     _subs.add(_messaging.onAlertOpened.listen(_open));
-    // Back from the phone's Settings, or after a spell offline: renew.
+    // Back from the phone's Settings, or after a spell offline: renew, and
+    // tell the server whether this phone can ring now.
     _lifecycle = AppLifecycleListener(onResume: () {
       ref.invalidate(alertPermissionProvider);
+      ref.invalidate(alertHealthProvider);
       _registrar.register(language: _language);
     });
 

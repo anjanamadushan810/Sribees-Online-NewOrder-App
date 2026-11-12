@@ -630,4 +630,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get alertsRetry => 'Try again';
+
+  @override
+  String get alertsQuietTitle => 'This phone will not ring for new orders';
+
+  @override
+  String get alertsAllGood => 'All set: this phone rings for new orders';
+
+  @override
+  String get alertsTurnOn => 'Turn on';
+
+  @override
+  String get alertsOpenSettings => 'Open settings';
+
+  @override
+  String get problemNotificationsOff => 'Notifications are off';
+
+  @override
+  String get problemNotificationsOffHow =>
+      'Allow notifications for Sribees New Orders.';
+
+  @override
+  String get problemChannelOff => 'New-order alerts are switched off';
+
+  @override
+  String get problemChannelOffHow =>
+      'In the phone\'s settings, switch \"New orders\" on.';
+
+  @override
+  String get problemChannelSilent => 'New-order alerts are silent';
+
+  @override
+  String get problemChannelSilentHow =>
+      'For \"New orders\", turn on Sound and Pop on screen.';
+
+  @override
+  String get problemBattery => 'Battery saving stops this app';
+
+  @override
+  String get problemBatteryHow => 'Open Battery and choose Unrestricted.';
+
+  @override
+  String get problemServer => 'The server does not know this phone';
 }

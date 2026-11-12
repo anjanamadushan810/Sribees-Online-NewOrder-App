@@ -233,5 +233,18 @@
   "labelLoadFailed": "No label yet. This parcel has no waybill: request a pickup first.",
   "alertsServerOk": "Connected: the server knows this phone",
   "alertsServerFailed": "Not connected: this phone will not ring",
-  "alertsRetry": "Try again"
+  "alertsRetry": "Try again",
+  "alertsQuietTitle": "This phone will not ring for new orders",
+  "alertsAllGood": "All set: this phone rings for new orders",
+  "alertsTurnOn": "Turn on",
+  "alertsOpenSettings": "Open settings",
+  "problemNotificationsOff": "Notifications are off",
+  "problemNotificationsOffHow": "Allow notifications for Sribees New Orders.",
+  "problemChannelOff": "New-order alerts are switched off",
+  "problemChannelOffHow": "In the phone's settings, switch \"New orders\" on.",
+  "problemChannelSilent": "New-order alerts are silent",
+  "problemChannelSilentHow": "For \"New orders\", turn on Sound and Pop on screen.",
+  "problemBattery": "Battery saving stops this app",
+  "problemBatteryHow": "Open Battery and choose Unrestricted.",
+  "problemServer": "The server does not know this phone"
 }

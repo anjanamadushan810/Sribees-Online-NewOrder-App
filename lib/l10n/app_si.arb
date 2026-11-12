@@ -204,5 +204,18 @@
   "labelLoadFailed": "තාම label එකක් නැහැ. Waybill එකක් නැහැ: මුලින්ම pickup එකක් ඉල්ලන්න.",
   "alertsServerOk": "සම්බන්ධයි: server එක මේ phone එක දන්නවා",
   "alertsServerFailed": "සම්බන්ධ නැහැ: මේ phone එක නාද වෙන්නේ නැහැ",
-  "alertsRetry": "ආයේ උත්සාහ කරන්න"
+  "alertsRetry": "ආයේ උත්සාහ කරන්න",
+  "alertsQuietTitle": "අලුත් order එකකට මේ phone එක නාද වෙන්නේ නැහැ",
+  "alertsAllGood": "හරි: අලුත් order එකකට මේ phone එක නාද වෙනවා",
+  "alertsTurnOn": "On කරන්න",
+  "alertsOpenSettings": "Settings open කරන්න",
+  "problemNotificationsOff": "Notifications off කරලා",
+  "problemNotificationsOffHow": "Sribees New Orders app එකට notifications වලට ඉඩ දෙන්න.",
+  "problemChannelOff": "අලුත් order alerts off කරලා",
+  "problemChannelOffHow": "Phone එකේ settings වල \"New orders\" on කරන්න.",
+  "problemChannelSilent": "අලුත් order alerts වලට sound එක නැහැ",
+  "problemChannelSilentHow": "\"New orders\" එකට Sound සහ Pop on screen on කරන්න.",
+  "problemBattery": "Battery saver එක මේ app එක නවත්වනවා",
+  "problemBatteryHow": "Battery open කරලා Unrestricted තෝරන්න.",
+  "problemServer": "Server එක මේ phone එක දන්නේ නැහැ"
 }

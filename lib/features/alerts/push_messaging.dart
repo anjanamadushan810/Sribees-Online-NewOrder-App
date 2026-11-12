@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/app_constants.dart';
+import 'alert_health.dart';
 import 'new_order_alert.dart';
 
 /// Whether this phone may show alerts.
@@ -47,6 +48,19 @@ abstract class PushMessaging {
   Future<String> deviceId();
 
   String get platform;
+
+  /// Whether this phone can ring: notifications allowed, the New orders
+  /// channel on, not battery-restricted (P9).
+  Future<AlertHealth> health();
+
+  /// This app's notification page in the phone's Settings.
+  Future<void> openNotificationSettings();
+
+  /// The New orders channel's page (sound, pop-up, on/off).
+  Future<void> openChannelSettings();
+
+  /// The app's details page, where battery restriction is lifted.
+  Future<void> openBatterySettings();
 }
 
 class FirebasePushMessaging implements PushMessaging {
@@ -150,4 +164,34 @@ class FirebasePushMessaging implements PushMessaging {
       return 'android';
     }
   }
+
+  @override
+  Future<AlertHealth> health() async {
+    try {
+      final m = await _channel.invokeMapMethod<Object?, Object?>('alertHealth');
+      if (m != null) return AlertHealth.fromMap(m);
+    } catch (_) {}
+    // No native answer (iOS, an old build): judge by the permission alone.
+    final allowed = await permission() == AlertPermission.granted;
+    return AlertHealth(
+      notificationsOn: allowed,
+      channel: ChannelState.on,
+      backgroundRestricted: false,
+    );
+  }
+
+  Future<void> _open(String method) async {
+    try {
+      await _channel.invokeMethod<bool>(method);
+    } catch (_) {}
+  }
+
+  @override
+  Future<void> openNotificationSettings() => _open('openNotificationSettings');
+
+  @override
+  Future<void> openChannelSettings() => _open('openChannelSettings');
+
+  @override
+  Future<void> openBatterySettings() => _open('openBatterySettings');
 }

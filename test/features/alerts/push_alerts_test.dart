@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sribees_new_orders/core/network/api_exceptions.dart';
 import 'package:sribees_new_orders/core/providers/app_version_provider.dart';
 import 'package:sribees_new_orders/core/providers/core_providers.dart';
+import 'package:sribees_new_orders/features/alerts/alert_health.dart';
 import 'package:sribees_new_orders/features/alerts/new_order_alert.dart';
 import 'package:sribees_new_orders/features/alerts/push_messaging.dart';
 import 'package:sribees_new_orders/features/alerts/push_registrar.dart';
@@ -103,10 +104,81 @@ void main() {
       expect(registrar.status.value.reason, 'FCM gave no token');
     });
 
+    test('each registration says whether the phone can ring, and its version', () async {
+      final r = PushRegistrar(
+        messaging: messaging,
+        api: api,
+        retryDelays: const [],
+        appVersion: () async => '0.8.0+9',
+      );
+      messaging.currentHealth = const AlertHealth(
+        notificationsOn: true,
+        channel: ChannelState.off,
+        backgroundRestricted: false,
+        model: 'Samsung SM-A155F',
+      );
+      await r.register(language: 'si');
+      expect(api.extras.single, {
+        'notifications_on': true,
+        'channel_state': 'off',
+        'background_restricted': false,
+        'device_model': 'Samsung SM-A155F',
+        'app_version': '0.8.0+9',
+      });
+    });
+
     test('sign-out tells the server which install stops', () async {
       await registrar.unregister();
       expect(api.unregistered, ['device-1']);
       expect(messaging.deleteTokenCalls, 1);
+    });
+  });
+
+  group('turning notifications back on (P9)', () {
+    test('Android shows its question and they allow: no Settings trip', () async {
+      final m = FakePushMessaging()
+        ..current = AlertPermission.denied
+        ..answer = AlertPermission.granted
+        ..answerDelay = const Duration(milliseconds: 900);
+      await turnOnNotifications(m);
+      expect(m.requestCalls, 1);
+      expect(m.openedSettings, isEmpty);
+    });
+
+    test('Android will not ask any more (instant no): open the app\'s notification page', () async {
+      final m = FakePushMessaging()
+        ..current = AlertPermission.denied
+        ..answer = AlertPermission.denied;
+      await turnOnNotifications(m);
+      expect(m.openedSettings, ['notifications']);
+    });
+
+    test('a real "no" from the dialog is respected', () async {
+      final m = FakePushMessaging()
+        ..current = AlertPermission.denied
+        ..answer = AlertPermission.denied
+        ..answerDelay = const Duration(milliseconds: 900);
+      await turnOnNotifications(m);
+      expect(m.openedSettings, isEmpty);
+    });
+
+    test('problems come first-to-fix first, the server last', () {
+      const h = AlertHealth(notificationsOn: false, channel: ChannelState.silent, backgroundRestricted: true);
+      expect(alertProblems(h, const PushStatus.failed('x')), [
+        AlertProblem.notificationsOff,
+        AlertProblem.channelSilent,
+        AlertProblem.batteryRestricted,
+        AlertProblem.serverFailed,
+      ]);
+      expect(alertProblems(AlertHealth.healthy, const PushStatus.unknown()), isEmpty);
+    });
+
+    test('the native answer is read safely', () {
+      final h = AlertHealth.fromMap(
+          {'notifications': true, 'channel': 'silent', 'backgroundRestricted': true, 'model': 'X 1'});
+      expect(h.channel, ChannelState.silent);
+      expect(h.backgroundRestricted, isTrue);
+      expect(AlertHealth.fromMap({}).problems, isEmpty, reason: 'unknown keys never invent a problem');
     });
   });
 
@@ -242,14 +314,19 @@ void main() {
       expect(api.registered.last['language'], 'en');
     });
 
-    testWidgets('Settings: blocked alerts show a quiet ⓘ, and the sound can be tested', (tester) async {
+    testWidgets('Settings: blocked alerts get a Turn on button, and the sound can be tested',
+        (tester) async {
       messaging
         ..current = AlertPermission.denied
-        ..answer = AlertPermission.denied;
+        ..answer = AlertPermission.denied
+        ..currentHealth = const AlertHealth(
+            notificationsOn: false, channel: ChannelState.on, backgroundRestricted: false);
       await pumpSignedIn(tester);
       await tester.tap(find.byIcon(Icons.settings_outlined));
       await tester.pumpAndSettle();
-      expect(find.byKey(const Key('alerts-info')), findsOneWidget);
+      expect(find.byKey(const Key('alerts-fix-notificationsOff')), findsOneWidget);
+      await tester.ensureVisible(find.byKey(const Key('alerts-test-sound')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('alerts-test-sound')));
       await tester.pump();
       expect(messaging.soundCalls, 1);
@@ -261,15 +338,71 @@ void main() {
       await pumpSignedIn(tester);
       await tester.tap(find.byIcon(Icons.settings_outlined));
       await tester.pumpAndSettle();
-      expect(find.byKey(const Key('alerts-server-reason')), findsOneWidget);
+      expect(find.textContaining('Server 503'), findsOneWidget);
       api.failWith = null;
-      await tester.ensureVisible(find.byKey(const Key('alerts-retry')));
+      final retry = find.byKey(const Key('alerts-fix-serverFailed'));
+      await tester.ensureVisible(retry);
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('alerts-retry')));
+      await tester.tap(retry);
       await tester.pumpAndSettle();
       expect(api.registered, isNotEmpty);
-      expect(find.byKey(const Key('alerts-retry')), findsNothing);
+      expect(find.byKey(const Key('alerts-fix-serverFailed')), findsNothing);
       expect(find.byIcon(Icons.cloud_done_outlined), findsOneWidget);
+    });
+
+    testWidgets('a healthy phone shows no 🔕 in the Orders bar', (tester) async {
+      messaging.current = messaging.answer;
+      await pumpSignedIn(tester);
+      expect(find.byKey(const Key('alerts-off-icon')), findsNothing);
+    });
+
+    testWidgets('"Not now", then 🔕 → On කරන්න asks again and the icon goes', (tester) async {
+      // A fresh install: notifications not allowed yet.
+      messaging.currentHealth = const AlertHealth(
+          notificationsOn: false, channel: ChannelState.on, backgroundRestricted: false);
+      await pumpSignedIn(tester);
+      // First run: the staff member taps "පස්සේ".
+      await tester.tap(find.text('පස්සේ'));
+      await tester.pumpAndSettle();
+      expect(messaging.requestCalls, 0);
+      expect(find.byKey(const Key('alerts-off-icon')), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('alerts-off-icon')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('alerts-fix-sheet')), findsOneWidget);
+      // Android shows its question and they allow.
+      await tester.tap(find.byKey(const Key('alerts-fix-notificationsOff')));
+      await tester.pumpAndSettle();
+      expect(messaging.requestCalls, 1);
+      expect(messaging.openedSettings, isEmpty, reason: 'the dialog answered, no Settings trip');
+      expect(find.text('හරි: අලුත් order එකකට මේ phone එක නාද වෙනවා'), findsOneWidget);
+      Navigator.of(tester.element(find.byKey(const Key('alerts-fix-sheet')))).pop();
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('alerts-off-icon')), findsNothing);
+      expect(api.extras.last['notifications_on'], isTrue, reason: 'the server hears it can ring');
+    });
+
+    testWidgets('channel silent and battery restricted each open their own Settings page',
+        (tester) async {
+      messaging
+        ..current = messaging.answer
+        ..currentHealth = const AlertHealth(
+            notificationsOn: true, channel: ChannelState.silent, backgroundRestricted: true);
+      await pumpSignedIn(tester);
+      await tester.tap(find.byKey(const Key('alerts-off-icon')));
+      await tester.pumpAndSettle();
+      // First to fix first.
+      final channelY = tester.getTopLeft(find.byKey(const Key('alerts-problem-channelSilent'))).dy;
+      final batteryY = tester.getTopLeft(find.byKey(const Key('alerts-problem-batteryRestricted'))).dy;
+      expect(channelY, lessThan(batteryY));
+
+      await tester.tap(find.byKey(const Key('alerts-fix-channelSilent')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('alerts-fix-batteryRestricted')));
+      await tester.pumpAndSettle();
+      expect(messaging.openedSettings, ['channel', 'battery']);
+      expect(api.extras.last['channel_state'], 'silent');
+      expect(api.extras.last['background_restricted'], isTrue);
     });
 
     testWidgets('signing out stops this phone', (tester) async {
@@ -301,6 +434,7 @@ class _FlakyApi implements StaffDevicesApi {
     required String deviceId,
     required String platform,
     required String language,
+    Map<String, Object?> extra = const {},
   }) async {
     calls++;
     if (failures-- > 0) {

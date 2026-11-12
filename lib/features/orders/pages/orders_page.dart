@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/utils/server_clock.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../alerts/alert_health_widgets.dart';
 import '../../auth/models/branch.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../settings/pages/settings_page.dart';
@@ -124,6 +125,7 @@ class _OrdersPageState extends ConsumerState<OrdersPage> with WidgetsBindingObse
           ],
         ),
         actions: [
+          const AlertHealthButton(),
           IconButton(
             key: const Key('open-settings'),
             tooltip: t.settingsTitle,

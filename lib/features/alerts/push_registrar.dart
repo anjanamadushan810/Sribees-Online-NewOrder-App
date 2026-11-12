@@ -4,16 +4,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/api_endpoints.dart';
 import '../../core/network/api_client.dart';
 import '../../core/network/api_exceptions.dart';
+import '../../core/providers/app_version_provider.dart';
 import '../../core/providers/core_providers.dart';
 import 'push_messaging.dart';
 
 /// The server side: POST / DELETE /admin/push-tokens.
 abstract class StaffDevicesApi {
+  /// [extra]: whether the phone can ring + app version (P9), for the owner's
+  /// Staff phones list.
   Future<void> register({
     required String token,
     required String deviceId,
     required String platform,
     required String language,
+    Map<String, Object?> extra = const {},
   });
 
   Future<void> unregister(String deviceId);
@@ -30,8 +34,10 @@ class HttpStaffDevicesApi implements StaffDevicesApi {
     required String deviceId,
     required String platform,
     required String language,
+    Map<String, Object?> extra = const {},
   }) async {
     await apiClient.post(ApiEndpoints.staffPushTokens, data: {
+      ...extra,
       'token': token,
       'device_id': deviceId,
       'platform': platform,
@@ -62,10 +68,14 @@ class PushRegistrar {
     required this.messaging,
     required this.api,
     this.retryDelays = const [Duration(seconds: 3), Duration(seconds: 10), Duration(seconds: 30)],
+    this.appVersion,
   });
 
   final PushMessaging messaging;
   final StaffDevicesApi api;
+
+  /// The installed build ("0.8.0+9"), sent along for the Staff phones list.
+  final Future<String?> Function()? appVersion;
 
   /// Waits between attempts. A first launch often races Google Play services
   /// for the FCM token; tests pass none.
@@ -108,6 +118,7 @@ class PushRegistrar {
         deviceId: await messaging.deviceId(),
         platform: messaging.platform,
         language: language,
+        extra: await _extra(),
       );
       return const PushStatus.ok();
     } on ApiException catch (e) {
@@ -115,6 +126,20 @@ class PushRegistrar {
     } catch (e) {
       return PushStatus.failed('Server: $e');
     }
+  }
+
+  /// Health + version. Never blocks registering: a phone that cannot say
+  /// how it is must still ring.
+  Future<Map<String, Object?>> _extra() async {
+    final out = <String, Object?>{};
+    try {
+      out.addAll((await messaging.health()).toServer());
+    } catch (_) {}
+    try {
+      final v = await appVersion?.call();
+      if (v != null && v.isNotEmpty) out['app_version'] = v;
+    } catch (_) {}
+    return out;
   }
 
   /// Sign-out. Both halves are best effort and independent: the server call
@@ -137,5 +162,6 @@ final pushRegistrarProvider = Provider<PushRegistrar>((ref) {
   return PushRegistrar(
     messaging: ref.watch(pushMessagingProvider),
     api: HttpStaffDevicesApi(ref.watch(apiClientProvider)),
+    appVersion: () => ref.read(appVersionProvider.future),
   );
 });

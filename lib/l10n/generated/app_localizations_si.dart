@@ -630,4 +630,46 @@ class AppLocalizationsSi extends AppLocalizations {
 
   @override
   String get alertsRetry => 'ආයේ උත්සාහ කරන්න';
+
+  @override
+  String get alertsQuietTitle => 'අලුත් order එකකට මේ phone එක නාද වෙන්නේ නැහැ';
+
+  @override
+  String get alertsAllGood => 'හරි: අලුත් order එකකට මේ phone එක නාද වෙනවා';
+
+  @override
+  String get alertsTurnOn => 'On කරන්න';
+
+  @override
+  String get alertsOpenSettings => 'Settings open කරන්න';
+
+  @override
+  String get problemNotificationsOff => 'Notifications off කරලා';
+
+  @override
+  String get problemNotificationsOffHow =>
+      'Sribees New Orders app එකට notifications වලට ඉඩ දෙන්න.';
+
+  @override
+  String get problemChannelOff => 'අලුත් order alerts off කරලා';
+
+  @override
+  String get problemChannelOffHow =>
+      'Phone එකේ settings වල \"New orders\" on කරන්න.';
+
+  @override
+  String get problemChannelSilent => 'අලුත් order alerts වලට sound එක නැහැ';
+
+  @override
+  String get problemChannelSilentHow =>
+      '\"New orders\" එකට Sound සහ Pop on screen on කරන්න.';
+
+  @override
+  String get problemBattery => 'Battery saver එක මේ app එක නවත්වනවා';
+
+  @override
+  String get problemBatteryHow => 'Battery open කරලා Unrestricted තෝරන්න.';
+
+  @override
+  String get problemServer => 'Server එක මේ phone එක දන්නේ නැහැ';
 }

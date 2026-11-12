@@ -7,8 +7,8 @@ import '../../../core/providers/locale_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../l10n/generated/app_localizations.dart';
-import '../../alerts/push_alerts_host.dart';
-import '../../alerts/push_messaging.dart';
+import '../../alerts/alert_health.dart';
+import '../../alerts/alert_health_widgets.dart';
 import '../../alerts/push_registrar.dart';
 import '../../auth/auth_labels.dart';
 import '../../auth/providers/auth_provider.dart';
@@ -204,80 +204,63 @@ class _InfoRow extends StatelessWidget {
   }
 }
 
-/// Whether this phone rings, and a way to hear the ringtone. When alerts are
-/// blocked the how-to sits behind a quiet ⓘ, not a warning line (owner tone).
+/// Whether this phone rings, what stops it (each with its own fix), and a way
+/// to hear the ringtone (P9: replaces the old ⓘ-only hint).
 class _AlertsCard extends ConsumerWidget {
   const _AlertsCard();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = AppLocalizations.of(context);
-    final permission = ref.watch(alertPermissionProvider).valueOrNull;
+    final health = ref.watch(alertHealthProvider);
     final messaging = ref.watch(pushMessagingProvider);
 
-    final (String status, bool off) = switch (permission) {
-      AlertPermission.granted => (t.alertsOn, false),
-      AlertPermission.denied || AlertPermission.notAsked => (t.alertsOff, true),
-      AlertPermission.unavailable => (t.alertsUnavailable, true),
-      null => ('…', false),
-    };
-
     return Card(
-      child: Column(
-        children: [
-          ListTile(
-            leading: Icon(
-              off ? Icons.notifications_off_outlined : Icons.notifications_active_outlined,
-              color: off ? AppColors.muted : AppColors.primary,
-            ),
-            title: Text(t.alertsSection),
-            subtitle: Text(status, key: const Key('alerts-status')),
-            trailing: off && permission != AlertPermission.unavailable
-                ? IconButton(
-                    key: const Key('alerts-info'),
-                    icon: const Icon(Icons.info_outline_rounded, size: 20),
-                    color: AppColors.muted,
-                    tooltip: t.alertsOffHint,
-                    onPressed: () => ScaffoldMessenger.of(context)
-                      ..hideCurrentSnackBar()
-                      ..showSnackBar(SnackBar(content: Text(t.alertsOffHint))),
-                  )
-                : null,
-          ),
-          ValueListenableBuilder<PushStatus>(
-            valueListenable: ref.read(pushRegistrarProvider).status,
-            builder: (context, s, _) => !s.known
-                ? const SizedBox.shrink()
-                : ListTile(
-                    key: const Key('alerts-server'),
-                    leading: Icon(
-                      s.ok ? Icons.cloud_done_outlined : Icons.cloud_off_outlined,
-                      color: s.ok ? AppColors.success : AppColors.error,
-                    ),
-                    title: Text(s.ok ? t.alertsServerOk : t.alertsServerFailed),
-                    subtitle: s.ok || s.reason == null
-                        ? null
-                        : Text(s.reason!, key: const Key('alerts-server-reason'),
-                            style: AppTypography.bodySmall(color: AppColors.muted)),
-                    trailing: s.ok
-                        ? null
-                        : TextButton(
-                            key: const Key('alerts-retry'),
-                            onPressed: () => ref.read(pushRegistrarProvider).register(
-                                  language: ref.read(localeProvider).languageCode,
-                                ),
-                            child: Text(t.alertsRetry),
-                          ),
-                  ),
-          ),
-          if (messaging.available)
-            ListTile(
-              key: const Key('alerts-test-sound'),
-              leading: const Icon(Icons.volume_up_outlined),
-              title: Text(t.alertsTestSound),
-              onTap: () => ref.read(pushRegistrarProvider).messaging.playAlertSound(),
-            ),
-        ],
+      child: ValueListenableBuilder<PushStatus>(
+        valueListenable: ref.read(pushRegistrarProvider).status,
+        builder: (context, server, _) {
+          final problems = alertProblems(health.valueOrNull, server);
+          final String status;
+          if (!messaging.available) {
+            status = t.alertsUnavailable;
+          } else if (health.isLoading && !health.hasValue) {
+            status = '…';
+          } else {
+            status = problems.isEmpty ? t.alertsOn : t.alertsQuietTitle;
+          }
+          final off = !messaging.available || problems.isNotEmpty;
+
+          return Column(
+            children: [
+              ListTile(
+                leading: Icon(
+                  off ? Icons.notifications_off_outlined : Icons.notifications_active_outlined,
+                  color: off ? AppColors.error : AppColors.primary,
+                ),
+                title: Text(t.alertsSection),
+                subtitle: Text(status, key: const Key('alerts-status')),
+              ),
+              if (problems.isNotEmpty)
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: AlertProblemsList(),
+                ),
+              if (server.known && server.ok)
+                ListTile(
+                  key: const Key('alerts-server'),
+                  leading: const Icon(Icons.cloud_done_outlined, color: AppColors.success),
+                  title: Text(t.alertsServerOk),
+                ),
+              if (messaging.available)
+                ListTile(
+                  key: const Key('alerts-test-sound'),
+                  leading: const Icon(Icons.volume_up_outlined),
+                  title: Text(t.alertsTestSound),
+                  onTap: () => ref.read(pushRegistrarProvider).messaging.playAlertSound(),
+                ),
+            ],
+          );
+        },
       ),
     );
   }

@@ -1243,6 +1243,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again'**
   String get alertsRetry;
+
+  /// No description provided for @alertsQuietTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone will not ring for new orders'**
+  String get alertsQuietTitle;
+
+  /// No description provided for @alertsAllGood.
+  ///
+  /// In en, this message translates to:
+  /// **'All set: this phone rings for new orders'**
+  String get alertsAllGood;
+
+  /// No description provided for @alertsTurnOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get alertsTurnOn;
+
+  /// No description provided for @alertsOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get alertsOpenSettings;
+
+  /// No description provided for @problemNotificationsOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are off'**
+  String get problemNotificationsOff;
+
+  /// No description provided for @problemNotificationsOffHow.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow notifications for Sribees New Orders.'**
+  String get problemNotificationsOffHow;
+
+  /// No description provided for @problemChannelOff.
+  ///
+  /// In en, this message translates to:
+  /// **'New-order alerts are switched off'**
+  String get problemChannelOff;
+
+  /// No description provided for @problemChannelOffHow.
+  ///
+  /// In en, this message translates to:
+  /// **'In the phone\'s settings, switch \"New orders\" on.'**
+  String get problemChannelOffHow;
+
+  /// No description provided for @problemChannelSilent.
+  ///
+  /// In en, this message translates to:
+  /// **'New-order alerts are silent'**
+  String get problemChannelSilent;
+
+  /// No description provided for @problemChannelSilentHow.
+  ///
+  /// In en, this message translates to:
+  /// **'For \"New orders\", turn on Sound and Pop on screen.'**
+  String get problemChannelSilentHow;
+
+  /// No description provided for @problemBattery.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery saving stops this app'**
+  String get problemBattery;
+
+  /// No description provided for @problemBatteryHow.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Battery and choose Unrestricted.'**
+  String get problemBatteryHow;
+
+  /// No description provided for @problemServer.
+  ///
+  /// In en, this message translates to:
+  /// **'The server does not know this phone'**
+  String get problemServer;
 }
 
 class _AppLocalizationsDelegate
