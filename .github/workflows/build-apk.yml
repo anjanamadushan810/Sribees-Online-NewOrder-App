@@ -41,6 +41,10 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          # Pinned: stable 3.50.0 (2026-11-12) needs AGP 9.1.1 and flags
+          # package:flutter/material.dart as deprecated, which fails the build.
+          # 3.47.9 built 0.7.0+8. Move up deliberately, not by surprise.
+          flutter-version: '3.47.9'
           cache: true
 
       - name: Install dependencies
