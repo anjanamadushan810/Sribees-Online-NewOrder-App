@@ -215,6 +215,77 @@ App:
 notification; a night-time order rings once and again at 07:00 (tested with a
 fake clock); full suite + migration replay x2 green; fresh reviewer signs off.
 
+### P9 — Turn alerts back on (owner interview 2026-11-12)
+
+Problem: the first-run question is the only way in. A staff member who taps
+"Not now" or the phone's "Don't allow" has no button to undo it; Settings shows
+"OFF" and a hint. Worse, a phone with the app allowed but the **New orders
+channel** switched off or silent, or the app battery-restricted, shows "ON" and
+still never rings. Today (2026-11-12) only the owner's phone is registered on
+prod, so nobody can see which staff phones would ring.
+
+Owner decisions:
+- A quiet **🔕 icon in the Orders app bar** whenever this phone would not ring
+  (owner tone: no warning line). Tap → a sheet listing what is wrong, each with
+  its own fix button. No icon when all is well.
+- **"On කරන්න"**: ask again from inside the app; when Android will not show the
+  question any more (it remembers a "no"), open this app's notification
+  settings page directly. Back in the app, the state refreshes by itself.
+- Also check the **New orders channel** (off / silent) and **battery
+  restriction**, and show the owner an **admin-web list of staff phones** with
+  whether each one can ring.
+
+App (`development`, 0.8.0+9):
+1. Native (MainActivity `sribees/alerts` channel): `alertHealth()` returns
+   `{notifications: on|off, canAskAgain, channel: on|silent|off,
+   backgroundRestricted, model}` from `areNotificationsEnabled`,
+   `shouldShowRequestPermissionRationale`, the `new_orders` channel's importance
+   and sound, and `ActivityManager.isBackgroundRestricted` (API 28+).
+   Openers: app notification settings (`ACTION_APP_NOTIFICATION_SETTINGS`),
+   the channel's page (`ACTION_CHANNEL_NOTIFICATION_SETTINGS`), app details for
+   battery (`ACTION_APPLICATION_DETAILS_SETTINGS`). No
+   `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` (Play policy; a restricted app is the
+   real problem, not the default "optimised").
+2. `alertHealthProvider` (refreshed on resume, after each fix, and after
+   registration) feeds the 🔕 icon, the sheet, and the Settings card (which gets
+   the same fix buttons instead of the ⓘ-only hint). The server-registration
+   failure from 0.6.1+7 joins the same list.
+3. Fix order in the sheet: notifications → channel → battery → server. Texts
+   si (default) + en.
+4. Registration (`POST /admin/push-tokens`) also sends `notifications`,
+   `channel`, `background_restricted`, `app_version`, `device_model`; it already
+   re-registers on every resume, so the server stays current.
+
+Backend (`fastapi_backend`, development first):
+5. Migration 113 (next free; re-check): `admin_push_tokens` gains
+   `notifications_on BOOL`, `channel_state VARCHAR(8)`,
+   `background_restricted BOOL`, `app_version VARCHAR(32)`,
+   `device_model VARCHAR(64)` — all nullable (older apps send none).
+6. `GET /admin/push-tokens`: super admins see every phone; a branch manager
+   sees their own branch's (Claude's call: lets a manager chase their staff).
+   Each row: staff name, role, branch, model, app version, can-ring
+   (all three checks OK), the failing check, last seen.
+   `can_ring` = notifications on AND channel on AND not restricted AND seen in
+   the last 7 days.
+
+Admin web (`SRIBEESonline/admin`, push to legacy-310 only):
+7. "Staff phones" page (Admin Users area): table from step 6 with a ✓ / ✗ per
+   phone and the failing check behind a quiet ⓘ; filter by branch. Also a
+   "no phone" line per branch with orders:read staff who registered none.
+
+**Done:**
+- App tests: icon hidden when healthy; shown for each failing check; "On
+  කරන්න" asks when `canAskAgain`, else opens settings (fakes); sheet order.
+- Emulator (dev APK): deny twice → 🔕 → On කරන්න opens the app's notification
+  page → switch on → back → icon gone. Mute the New orders channel → 🔕 shows
+  "silent" → its button opens the channel page. `adb shell cmd appops set
+  <pkg> RUN_ANY_IN_BACKGROUND ignore` → battery item shows; reset → gone.
+- Backend: register stores the five fields; old-app payload (none) still 200;
+  list scope (super admin all, manager own branch, other roles 403); full suite
+  + migration replay x2 green; `ruff check .` clean.
+- Admin web: page lists the emulator phone ✗ then ✓ after the fix; vitest green.
+- Fresh-context reviewer signs off; then MCQ before main/prod.
+
 ## Out of v1 (later)
 
 Returns approve/reject, escalations, status override, CSV/PDF export, iOS,
