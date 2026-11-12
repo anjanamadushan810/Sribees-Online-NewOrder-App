@@ -82,11 +82,40 @@ Future<void> showAlertFixSheet(BuildContext context) {
 
 /// One row per problem with its own fix button, first to fix first. Used by
 /// the sheet and by the Settings card.
-class AlertProblemsList extends ConsumerWidget {
+class AlertProblemsList extends ConsumerStatefulWidget {
   const AlertProblemsList({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AlertProblemsList> createState() => _AlertProblemsListState();
+}
+
+class _AlertProblemsListState extends ConsumerState<AlertProblemsList> {
+  /// A fix still running: its button is disabled and shows a spinner, so a
+  /// second tap cannot start a second retry loop.
+  final _busy = <AlertProblem>{};
+
+  Future<void> _fix(AlertProblem p) async {
+    if (_busy.contains(p)) return;
+    // Taken before any await: the row may be gone when the fix finishes (the
+    // problem got solved and Settings dropped the list) -- `ref` would throw.
+    final container = ProviderScope.containerOf(context, listen: false);
+    setState(() => _busy.add(p));
+    try {
+      await fixAlertProblem(
+        p,
+        messaging: container.read(pushMessagingProvider),
+        registrar: container.read(pushRegistrarProvider),
+        language: container.read(localeProvider).languageCode,
+      );
+    } finally {
+      container.invalidate(alertHealthProvider);
+      container.invalidate(alertPermissionProvider);
+      if (mounted) setState(() => _busy.remove(p));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return _Problems(
       builder: (context, problems, server) {
         final t = AppLocalizations.of(context);
@@ -118,17 +147,14 @@ class AlertProblemsList extends ConsumerWidget {
                           const SizedBox(height: 8),
                           FilledButton(
                             key: Key('alerts-fix-${p.name}'),
-                            onPressed: () async {
-                              await fixAlertProblem(
-                                p,
-                                messaging: ref.read(pushMessagingProvider),
-                                registrar: ref.read(pushRegistrarProvider),
-                                language: ref.read(localeProvider).languageCode,
-                              );
-                              ref.invalidate(alertHealthProvider);
-                              ref.invalidate(alertPermissionProvider);
-                            },
-                            child: Text(_action(t, p)),
+                            onPressed: _busy.contains(p) ? null : () => _fix(p),
+                            child: _busy.contains(p)
+                                ? const SizedBox(
+                                    width: 18,
+                                    height: 18,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  )
+                                : Text(_action(t, p)),
                           ),
                         ],
                       ),

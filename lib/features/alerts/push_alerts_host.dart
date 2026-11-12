@@ -70,6 +70,7 @@ class _PushAlertsHostState extends ConsumerState<PushAlertsHost> {
     }
     if (!mounted) return;
     await _registrar.register(language: _language);
+    if (mounted) ref.invalidate(alertHealthProvider);
 
     _subs.add(_messaging.onTokenRefresh.listen(
       (t) => _registrar.register(language: _language, token: t),
@@ -78,10 +79,11 @@ class _PushAlertsHostState extends ConsumerState<PushAlertsHost> {
     _subs.add(_messaging.onAlertOpened.listen(_open));
     // Back from the phone's Settings, or after a spell offline: renew, and
     // tell the server whether this phone can ring now.
-    _lifecycle = AppLifecycleListener(onResume: () {
+    _lifecycle = AppLifecycleListener(onResume: () async {
       ref.invalidate(alertPermissionProvider);
       ref.invalidate(alertHealthProvider);
-      _registrar.register(language: _language);
+      await _registrar.register(language: _language);
+      if (mounted) ref.invalidate(alertHealthProvider);
     });
 
     final initial = await _messaging.initialAlert();

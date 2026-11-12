@@ -16,7 +16,12 @@ class AlertHealth {
     required this.channel,
     required this.backgroundRestricted,
     this.model,
+    this.canAskAgain = true,
   });
+
+  /// Android will still show its "allow notifications?" question. False after
+  /// a second "no", and always before Android 13 (it never asks there).
+  final bool canAskAgain;
 
   static const healthy = AlertHealth(
     notificationsOn: true,
@@ -45,6 +50,7 @@ class AlertHealth {
         },
         backgroundRestricted: m['backgroundRestricted'] == true,
         model: m['model'] as String?,
+        canAskAgain: m['canAskAgain'] != false,
       );
 
   /// The phone's own problems, first to fix first.
@@ -78,11 +84,14 @@ List<AlertProblem> alertProblems(AlertHealth? health, PushStatus server) => [
       if (server.known && !server.ok) AlertProblem.serverFailed,
     ];
 
-/// "On කරන්න" for notifications: ask from inside the app; when Android no
-/// longer shows the question (it remembers a "no", and phones before Android
-/// 13 never ask) the answer comes back at once -- then open this app's
-/// notification page instead. A real "no" from the dialog takes the person
-/// longer than [instant], and is respected.
+/// "On කරන්න" for notifications: ask from inside the app. When Android no
+/// longer shows the question (it remembers a second "no"; phones before
+/// Android 13 never ask) open this app's notification page instead. Two
+/// signs that no question was shown, either is enough:
+///  * the answer came back faster than a person can read it ([instant]);
+///  * Android now says it will not ask again (`canAskAgain` false) -- this
+///    also covers a slow phone where the instant "no" took longer.
+/// A first "no" from the dialog leaves `canAskAgain` true and is respected.
 Future<void> turnOnNotifications(
   PushMessaging messaging, {
   Duration instant = const Duration(milliseconds: 700),
@@ -90,7 +99,12 @@ Future<void> turnOnNotifications(
   final watch = Stopwatch()..start();
   final answer = await messaging.requestPermission();
   if (answer == AlertPermission.granted) return;
-  if (watch.elapsed < instant) await messaging.openNotificationSettings();
+  final fast = watch.elapsed < instant;
+  var willAsk = true;
+  try {
+    willAsk = (await messaging.health()).canAskAgain;
+  } catch (_) {}
+  if (fast || !willAsk) await messaging.openNotificationSettings();
 }
 
 /// The fix button for one problem.

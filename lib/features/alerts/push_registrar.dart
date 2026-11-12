@@ -96,8 +96,12 @@ class PushRegistrar {
     }
     for (var attempt = 0;; attempt++) {
       final result = await _registerOnce(language: language, token: token);
-      status.value = result;
-      if (result.ok || attempt >= retryDelays.length) return result.ok;
+      // Published only when settled: a first launch that loses the race for
+      // the FCM token must not flash "will not ring" (the 🔕) for 3 seconds.
+      if (result.ok || attempt >= retryDelays.length) {
+        status.value = result;
+        return result.ok;
+      }
       await Future<void>.delayed(retryDelays[attempt]);
     }
   }

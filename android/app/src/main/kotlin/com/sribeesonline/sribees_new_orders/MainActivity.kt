@@ -1,5 +1,6 @@
 package com.sribeesonline.sribees_new_orders
 
+import android.Manifest
 import android.app.ActivityManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -70,7 +71,12 @@ class MainActivity : FlutterActivity() {
             false
         }
         val model = "${Build.MANUFACTURER} ${Build.MODEL}".trim().take(64)
+        // After one "no" Android shows its question once more; after that (or
+        // before Android 13, which never asks) only Settings can turn it on.
+        val canAskAgain = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)
         return mapOf(
+            "canAskAgain" to canAskAgain,
             "notifications" to notificationsOn,
             "channel" to channel,
             "backgroundRestricted" to restricted,

@@ -153,6 +153,34 @@ void main() {
       expect(m.openedSettings, ['notifications']);
     });
 
+    test('a slow phone whose instant "no" took >700 ms still opens Settings (canAskAgain false)',
+        () async {
+      final m = FakePushMessaging()
+        ..current = AlertPermission.denied
+        ..answer = AlertPermission.denied
+        ..answerDelay = const Duration(milliseconds: 900)
+        ..currentHealth = const AlertHealth(
+            notificationsOn: false,
+            channel: ChannelState.on,
+            backgroundRestricted: false,
+            canAskAgain: false);
+      await turnOnNotifications(m);
+      expect(m.openedSettings, ['notifications']);
+    });
+
+    test('a launch that loses the FCM race does not flash "will not ring" while retrying', () async {
+      final flaky = _FlakyApi(failures: 1);
+      final r = PushRegistrar(
+        messaging: FakePushMessaging(),
+        api: flaky,
+        retryDelays: const [Duration(milliseconds: 50)],
+      );
+      final seen = <bool>[];
+      r.status.addListener(() => seen.add(r.status.value.ok));
+      expect(await r.register(language: 'si'), isTrue);
+      expect(seen, [true], reason: 'only the settled result is published');
+    });
+
     test('a real "no" from the dialog is respected', () async {
       final m = FakePushMessaging()
         ..current = AlertPermission.denied
@@ -348,6 +376,29 @@ void main() {
       expect(api.registered, isNotEmpty);
       expect(find.byKey(const Key('alerts-fix-serverFailed')), findsNothing);
       expect(find.byIcon(Icons.cloud_done_outlined), findsOneWidget);
+    });
+
+    for (final (name, health) in [
+      ('channel off', const AlertHealth(notificationsOn: true, channel: ChannelState.off, backgroundRestricted: false)),
+      ('battery restricted', const AlertHealth(notificationsOn: true, channel: ChannelState.on, backgroundRestricted: true)),
+    ]) {
+      testWidgets('$name alone shows the 🔕', (tester) async {
+        messaging
+          ..current = messaging.answer
+          ..currentHealth = health;
+        await pumpSignedIn(tester);
+        expect(find.byKey(const Key('alerts-off-icon')), findsOneWidget);
+      });
+    }
+
+    testWidgets('the server not knowing the phone shows the 🔕 (after the retries)', (tester) async {
+      messaging.current = messaging.answer;
+      api.failWith = ApiException(message: 'down', statusCode: 503, kind: ApiErrorKind.server);
+      await pumpSignedIn(tester);
+      expect(find.byKey(const Key('alerts-off-icon')), findsOneWidget);
+      await tester.tap(find.byKey(const Key('alerts-off-icon')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('alerts-fix-serverFailed')), findsOneWidget);
     });
 
     testWidgets('a healthy phone shows no 🔕 in the Orders bar', (tester) async {
