@@ -734,4 +734,8 @@ class AppLocalizationsSi extends AppLocalizations {
   String packWeightNeed(String need, String done) {
     return 'ඇණවුම $need kg, scan කළේ $done kg';
   }
+
+  @override
+  String get packNoScan =>
+      'මෙම භාණ්ඩයට QR ලේබලයක් නැහැ: සුපුරුදු ලෙස pack කරන්න';
 }

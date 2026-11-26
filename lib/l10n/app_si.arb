@@ -237,5 +237,6 @@
   "packOff": "Scan කිරීම තවම on කර නැහැ. සුපුරුදු ලෙස pack කරන්න.",
   "packDone": "හරි",
   "packNoCamera": "කැමරාවට අවසර නැහැ. Scanner එක හෝ ටයිප් කිරීම භාවිත කරන්න.",
-  "packWeightNeed": "ඇණවුම {need} kg, scan කළේ {done} kg"
+  "packWeightNeed": "ඇණවුම {need} kg, scan කළේ {done} kg",
+  "packNoScan": "මෙම භාණ්ඩයට QR ලේබලයක් නැහැ: සුපුරුදු ලෙස pack කරන්න"
 }

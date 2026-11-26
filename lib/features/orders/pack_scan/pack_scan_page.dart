@@ -44,8 +44,8 @@ class _PackScanPageState extends ConsumerState<PackScanPage> {
   void _take(PackProgress p) {
     _p = p;
     final current = p.lines.where((l) => l.itemId == _selected).firstOrNull;
-    if (current == null || current.done) {
-      _selected = p.lines.where((l) => !l.done).firstOrNull?.itemId ?? _selected;
+    if (current == null || current.done || current.noScan) {
+      _selected = p.lines.where((l) => !l.done && !l.noScan).firstOrNull?.itemId ?? _selected;
     }
   }
 
@@ -79,7 +79,7 @@ class _PackScanPageState extends ConsumerState<PackScanPage> {
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           decoration: InputDecoration(
               labelText: t.packWeightKg,
-              helperText: t.packWeightNeed(line.needKg!.toStringAsFixed(3),
+              helperText: t.packWeightNeed((line.needKg ?? 0).toStringAsFixed(3),
                   line.scannedKg.toStringAsFixed(3))),
         ),
         actions: [
@@ -149,7 +149,7 @@ class _PackScanPageState extends ConsumerState<PackScanPage> {
               final l = _p?.lines.where((x) => x.itemId == _selected).firstOrNull;
               if (l == null) return '';
               return l.byWeight
-                  ? '${l.name}: ${l.scannedKg.toStringAsFixed(3)} / ${l.needKg!.toStringAsFixed(3)} kg'
+                  ? '${l.name}: ${l.scannedKg.toStringAsFixed(3)} / ${(l.needKg ?? 0).toStringAsFixed(3)} kg'
                   : '${l.name}: ${l.scannedUnits} / ${l.quantity}';
             })));
     if (mounted) setState(() {});
@@ -210,13 +210,17 @@ class _PackScanPageState extends ConsumerState<PackScanPage> {
             color: l.itemId == _selected ? AppColors.primary.withValues(alpha: 0.06) : null,
             child: ListTile(
               selected: l.itemId == _selected,
+              enabled: !l.noScan,
               onTap: () => setState(() => _selected = l.itemId),
               leading: Icon(l.done ? Icons.check_circle : Icons.radio_button_unchecked,
                   color: l.done ? AppColors.success : null),
               title: Text([l.name, if (l.variant != null) l.variant].join(' · ')),
-              subtitle: Text(l.byWeight
-                  ? '${l.scannedKg.toStringAsFixed(3)} / ${l.needKg!.toStringAsFixed(3)} kg'
-                  : '${l.scannedUnits} / ${l.quantity}'),
+              subtitle: Text(l.noScan
+                  ? t.packNoScan
+                  : l.byWeight
+                      ? '${l.scannedKg.toStringAsFixed(3)} kg'
+                          '${l.needKg == null ? '' : ' / ${l.needKg!.toStringAsFixed(3)} kg'}'
+                      : '${l.scannedUnits} / ${l.quantity}'),
               trailing: l.labels.isEmpty
                   ? null
                   : IconButton(

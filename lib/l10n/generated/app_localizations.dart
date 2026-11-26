@@ -1435,6 +1435,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ordered {need} kg, scanned {done} kg'**
   String packWeightNeed(String need, String done);
+
+  /// No description provided for @packNoScan.
+  ///
+  /// In en, this message translates to:
+  /// **'No QR label for this item: pack as usual'**
+  String get packNoScan;
 }
 
 class _AppLocalizationsDelegate

@@ -733,4 +733,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String packWeightNeed(String need, String done) {
     return 'Ordered $need kg, scanned $done kg';
   }
+
+  @override
+  String get packNoScan => 'No QR label for this item: pack as usual';
 }

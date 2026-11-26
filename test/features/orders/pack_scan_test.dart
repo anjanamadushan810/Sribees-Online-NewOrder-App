@@ -26,5 +26,9 @@ void main() {
     expect(p.lines.last.byWeight, isTrue);
     expect(p.lines.last.needKg, 1.0);
     expect(PackProgress.fromJson({'enabled': false}).complete, isTrue);
+    final loose = PackLine.fromJson({'order_item_id': 'c', 'by_weight': true, 'need_kg': null,
+                                     'no_scan': false});
+    expect(loose.byWeight, isTrue);
+    expect(PackLine.fromJson({'order_item_id': 'd', 'no_scan': true}).noScan, isTrue);
   });
 }

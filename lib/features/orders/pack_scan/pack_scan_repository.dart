@@ -33,6 +33,12 @@ class PackLine {
   final List<String> labels;
   final bool done;
 
+  /// Sold by weight: each scan names a bag and asks the kilograms.
+  final bool weighed;
+
+  /// No pack size, so no stock in Supply: nothing to scan.
+  final bool noScan;
+
   const PackLine({
     required this.itemId,
     required this.name,
@@ -43,9 +49,11 @@ class PackLine {
     required this.done,
     this.variant,
     this.needKg,
+    this.weighed = false,
+    this.noScan = false,
   });
 
-  bool get byWeight => needKg != null;
+  bool get byWeight => weighed || needKg != null;
 
   factory PackLine.fromJson(Map<String, dynamic> j) => PackLine(
         itemId: '${j['order_item_id']}',
@@ -57,6 +65,8 @@ class PackLine {
         needKg: j['need_kg'] == null ? null : double.tryParse('${j['need_kg']}'),
         labels: [for (final l in (j['labels'] as List? ?? const [])) '$l'],
         done: j['done'] == true,
+        weighed: j['by_weight'] == true,
+        noScan: j['no_scan'] == true,
       );
 }
 

@@ -272,5 +272,6 @@
       "need": { "type": "String" },
       "done": { "type": "String" }
     }
-  }
+  },
+  "packNoScan": "No QR label for this item: pack as usual"
 }
