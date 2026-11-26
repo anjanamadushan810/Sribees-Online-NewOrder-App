@@ -246,5 +246,31 @@
   "problemChannelSilentHow": "For \"New orders\", turn on Sound and Pop on screen.",
   "problemBattery": "Battery saving stops this app",
   "problemBatteryHow": "Open Battery and choose Unrestricted.",
-  "problemServer": "The server does not know this phone"
+  "problemServer": "The server does not know this phone",
+
+  "packOpen": "Scan to pack",
+  "packTitle": "Pack by scan",
+  "packScanHere": "Scan with the scanner or type the label number",
+  "packCamera": "Camera",
+  "packNotLabel": "That is not a Sribees label",
+  "packPickLine": "Tap the item you are packing first",
+  "packWeightTitle": "Weight taken from this bag",
+  "packWeightKg": "Kilograms",
+  "packAdd": "Add",
+  "packWeightMissing": "Enter the kilograms to add this bag",
+  "packFailed": "The scan did not go through. Try again.",
+  "packUndo": "Take back the last scan",
+  "packAllDone": "Every unit is scanned. You can mark the order packed.",
+  "packDoneButton": "Done: back to the order",
+  "packLater": "Finish later",
+  "packOff": "Scanning is not switched on yet. Pack as usual.",
+  "packDone": "Done",
+  "packNoCamera": "No camera permission. Use the scanner or type the number.",
+  "packWeightNeed": "Ordered {need} kg, scanned {done} kg",
+  "@packWeightNeed": {
+    "placeholders": {
+      "need": { "type": "String" },
+      "done": { "type": "String" }
+    }
+  }
 }

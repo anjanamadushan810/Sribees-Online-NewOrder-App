@@ -672,4 +672,65 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get problemServer => 'The server does not know this phone';
+
+  @override
+  String get packOpen => 'Scan to pack';
+
+  @override
+  String get packTitle => 'Pack by scan';
+
+  @override
+  String get packScanHere => 'Scan with the scanner or type the label number';
+
+  @override
+  String get packCamera => 'Camera';
+
+  @override
+  String get packNotLabel => 'That is not a Sribees label';
+
+  @override
+  String get packPickLine => 'Tap the item you are packing first';
+
+  @override
+  String get packWeightTitle => 'Weight taken from this bag';
+
+  @override
+  String get packWeightKg => 'Kilograms';
+
+  @override
+  String get packAdd => 'Add';
+
+  @override
+  String get packWeightMissing => 'Enter the kilograms to add this bag';
+
+  @override
+  String get packFailed => 'The scan did not go through. Try again.';
+
+  @override
+  String get packUndo => 'Take back the last scan';
+
+  @override
+  String get packAllDone =>
+      'Every unit is scanned. You can mark the order packed.';
+
+  @override
+  String get packDoneButton => 'Done: back to the order';
+
+  @override
+  String get packLater => 'Finish later';
+
+  @override
+  String get packOff => 'Scanning is not switched on yet. Pack as usual.';
+
+  @override
+  String get packDone => 'Done';
+
+  @override
+  String get packNoCamera =>
+      'No camera permission. Use the scanner or type the number.';
+
+  @override
+  String packWeightNeed(String need, String done) {
+    return 'Ordered $need kg, scanned $done kg';
+  }
 }

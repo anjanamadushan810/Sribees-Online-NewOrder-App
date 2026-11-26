@@ -217,5 +217,25 @@
   "problemChannelSilentHow": "\"New orders\" එකට Sound සහ Pop on screen on කරන්න.",
   "problemBattery": "Battery saver එක මේ app එක නවත්වනවා",
   "problemBatteryHow": "Battery open කරලා Unrestricted තෝරන්න.",
-  "problemServer": "Server එක මේ phone එක දන්නේ නැහැ"
+  "problemServer": "Server එක මේ phone එක දන්නේ නැහැ",
+
+  "packOpen": "Scan කර pack කරන්න",
+  "packTitle": "Scan කර pack කිරීම",
+  "packScanHere": "Scanner එකෙන් scan කරන්න හෝ ලේබල් අංකය ටයිප් කරන්න",
+  "packCamera": "කැමරාව",
+  "packNotLabel": "මෙය Sribees ලේබලයක් නොවේ",
+  "packPickLine": "මුලින්ම pack කරන භාණ්ඩය තෝරන්න",
+  "packWeightTitle": "මෙම මල්ලෙන් ගත් බර",
+  "packWeightKg": "කිලෝග්‍රෑම්",
+  "packAdd": "එකතු කරන්න",
+  "packWeightMissing": "මෙම මල්ල එකතු කිරීමට කිලෝග්‍රෑම් දමන්න",
+  "packFailed": "Scan එක සාර්ථක වුණේ නැහැ. නැවත උත්සාහ කරන්න.",
+  "packUndo": "අන්තිම scan එක ආපසු ගන්න",
+  "packAllDone": "සියලු ඒකක scan කළා. දැන් order එක packed කරන්න පුළුවන්.",
+  "packDoneButton": "හරි: order එකට ආපසු",
+  "packLater": "පසුව අවසන් කරන්න",
+  "packOff": "Scan කිරීම තවම on කර නැහැ. සුපුරුදු ලෙස pack කරන්න.",
+  "packDone": "හරි",
+  "packNoCamera": "කැමරාවට අවසර නැහැ. Scanner එක හෝ ටයිප් කිරීම භාවිත කරන්න.",
+  "packWeightNeed": "ඇණවුම {need} kg, scan කළේ {done} kg"
 }

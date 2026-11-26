@@ -1321,6 +1321,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The server does not know this phone'**
   String get problemServer;
+
+  /// No description provided for @packOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan to pack'**
+  String get packOpen;
+
+  /// No description provided for @packTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pack by scan'**
+  String get packTitle;
+
+  /// No description provided for @packScanHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan with the scanner or type the label number'**
+  String get packScanHere;
+
+  /// No description provided for @packCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get packCamera;
+
+  /// No description provided for @packNotLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'That is not a Sribees label'**
+  String get packNotLabel;
+
+  /// No description provided for @packPickLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the item you are packing first'**
+  String get packPickLine;
+
+  /// No description provided for @packWeightTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight taken from this bag'**
+  String get packWeightTitle;
+
+  /// No description provided for @packWeightKg.
+  ///
+  /// In en, this message translates to:
+  /// **'Kilograms'**
+  String get packWeightKg;
+
+  /// No description provided for @packAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get packAdd;
+
+  /// No description provided for @packWeightMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the kilograms to add this bag'**
+  String get packWeightMissing;
+
+  /// No description provided for @packFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The scan did not go through. Try again.'**
+  String get packFailed;
+
+  /// No description provided for @packUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Take back the last scan'**
+  String get packUndo;
+
+  /// No description provided for @packAllDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Every unit is scanned. You can mark the order packed.'**
+  String get packAllDone;
+
+  /// No description provided for @packDoneButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Done: back to the order'**
+  String get packDoneButton;
+
+  /// No description provided for @packLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish later'**
+  String get packLater;
+
+  /// No description provided for @packOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Scanning is not switched on yet. Pack as usual.'**
+  String get packOff;
+
+  /// No description provided for @packDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get packDone;
+
+  /// No description provided for @packNoCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'No camera permission. Use the scanner or type the number.'**
+  String get packNoCamera;
+
+  /// No description provided for @packWeightNeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Ordered {need} kg, scanned {done} kg'**
+  String packWeightNeed(String need, String done);
 }
 
 class _AppLocalizationsDelegate

@@ -672,4 +672,66 @@ class AppLocalizationsSi extends AppLocalizations {
 
   @override
   String get problemServer => 'Server එක මේ phone එක දන්නේ නැහැ';
+
+  @override
+  String get packOpen => 'Scan කර pack කරන්න';
+
+  @override
+  String get packTitle => 'Scan කර pack කිරීම';
+
+  @override
+  String get packScanHere =>
+      'Scanner එකෙන් scan කරන්න හෝ ලේබල් අංකය ටයිප් කරන්න';
+
+  @override
+  String get packCamera => 'කැමරාව';
+
+  @override
+  String get packNotLabel => 'මෙය Sribees ලේබලයක් නොවේ';
+
+  @override
+  String get packPickLine => 'මුලින්ම pack කරන භාණ්ඩය තෝරන්න';
+
+  @override
+  String get packWeightTitle => 'මෙම මල්ලෙන් ගත් බර';
+
+  @override
+  String get packWeightKg => 'කිලෝග්‍රෑම්';
+
+  @override
+  String get packAdd => 'එකතු කරන්න';
+
+  @override
+  String get packWeightMissing => 'මෙම මල්ල එකතු කිරීමට කිලෝග්‍රෑම් දමන්න';
+
+  @override
+  String get packFailed => 'Scan එක සාර්ථක වුණේ නැහැ. නැවත උත්සාහ කරන්න.';
+
+  @override
+  String get packUndo => 'අන්තිම scan එක ආපසු ගන්න';
+
+  @override
+  String get packAllDone =>
+      'සියලු ඒකක scan කළා. දැන් order එක packed කරන්න පුළුවන්.';
+
+  @override
+  String get packDoneButton => 'හරි: order එකට ආපසු';
+
+  @override
+  String get packLater => 'පසුව අවසන් කරන්න';
+
+  @override
+  String get packOff => 'Scan කිරීම තවම on කර නැහැ. සුපුරුදු ලෙස pack කරන්න.';
+
+  @override
+  String get packDone => 'හරි';
+
+  @override
+  String get packNoCamera =>
+      'කැමරාවට අවසර නැහැ. Scanner එක හෝ ටයිප් කිරීම භාවිත කරන්න.';
+
+  @override
+  String packWeightNeed(String need, String done) {
+    return 'ඇණවුම $need kg, scan කළේ $done kg';
+  }
 }

@@ -13,6 +13,7 @@ import '../models/order_detail.dart';
 import '../models/order_status.dart';
 import '../models/order_summary.dart';
 import '../order_labels.dart';
+import '../pack_scan/pack_scan_page.dart';
 import '../providers/order_detail_provider.dart';
 import '../widgets/courier_section.dart';
 import '../widgets/status_chip.dart';
@@ -113,8 +114,25 @@ class OrderDetailPage extends ConsumerWidget {
     // Read-only roles get no buttons; the server also returns none for them.
     final actions = canUpdate ? s.actions : const <StatusAction>[];
 
+    final canScan = canUpdate &&
+        order != null &&
+        const {OrderStatus.confirmed, OrderStatus.processing, OrderStatus.packing}
+            .contains(order.status);
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(title: Text(title), actions: [
+        if (canScan)
+          IconButton(
+            key: const Key('pack-scan'),
+            tooltip: t.packOpen,
+            icon: const Icon(Icons.qr_code_scanner),
+            onPressed: () async {
+              await Navigator.of(context).push(MaterialPageRoute<bool>(
+                  builder: (_) =>
+                      PackScanPage(orderId: orderId, orderNumber: order.orderNumber)));
+              await ref.read(orderDetailProvider(orderId).notifier).load();
+            },
+          ),
+      ]),
       body: body,
       bottomNavigationBar: order == null
           ? null
